@@ -12,16 +12,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     private var model: MovieModel!
     private var tableView: UITableView!
-    
-    var refreshControl: UIRefreshControl!
-    var tableData: [AnyObject]!
-    var task: URLSessionDownloadTask!
-    var session: URLSession!
-    var cache: NSCache<AnyObject, AnyObject>!
+    private var refreshControl: UIRefreshControl!
+    private var tableData: [AnyObject]!
+    private var cache: NSCache<AnyObject, AnyObject>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        model = MovieModel()
+
         setupTableView()
         reloadTableView()
     }
@@ -44,21 +43,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         guard let artworkUrl = dictionary["artworkUrl100"] as? String,
             let url = URL(string: artworkUrl)
-            else { return UITableViewCell() }
+        else { return cell }
         
-        task = session.downloadTask(with: url, completionHandler: { [weak self] (location, response, error) -> Void in
-            guard let self = self else { return }
-            if let data = try? Data(contentsOf: url) {
-                DispatchQueue.main.async(execute: { () -> Void in
-                    if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
-                        guard let cellImage = UIImage(data: data) else { return }
-                        updateCell.movieImageView.image = cellImage
-                        self.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
-                    }
-                })
-            }
+        model.fetchImage(url: url, completion: { [weak self] cellImage in
+            guard let self = self, let cellImage = cellImage else { return }
+            DispatchQueue.main.async(execute: { () -> Void in
+                if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
+                    updateCell.movieImageView.image = cellImage
+                    self.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
+                }
+            })
         })
-        task.resume()
+        
         return cell
     }
 }
@@ -75,8 +71,8 @@ extension ViewController {
     
     private func setupTableView() {
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
-        let displayWidth: CGFloat = self.view.frame.width
-        let displayHeight: CGFloat = self.view.frame.height
+        let displayWidth: CGFloat = view.frame.width
+        let displayHeight: CGFloat = view.frame.height
         
         tableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight))
         tableView.register(MovieTableViewCell.classForCoder(), forCellReuseIdentifier: "MyCell")
@@ -87,13 +83,10 @@ extension ViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        self.view.addSubview(tableView)
-        
-        session = URLSession.shared
-        task = URLSessionDownloadTask()
-                
+        view.addSubview(tableView)
+                        
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(ViewController.reloadTableView), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(reloadTableView), for: .valueChanged)
         tableView.refreshControl = self.refreshControl
                 
         tableData = []
@@ -102,18 +95,16 @@ extension ViewController {
     
     @objc
     private func reloadTableView() {
-        guard let url = URL(string: "https://itunes.apple.com/search?term=flappy&entity=software") else { return }
-        task = session.downloadTask(with: url, completionHandler: { [weak self] (url: URL?, response: URLResponse?, error: Error?) -> Void in
-            guard let self = self, let url = url else { return }
-            do {
-                guard let data = try? Data(contentsOf: url) else { return }
-                let dic = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as AnyObject
-                self.tableData = dic.value(forKey : "results") as? [AnyObject]
+        // TODO - Fix this query
+        model.fetchQuery("", completion: { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                self.tableData = data
                 self.reloadData()
-            } catch {
-                print("Error: \(error)")
+            case .failure(let error):
+                print("Error: \(String(describing: error))")
             }
         })
-        task.resume()
     }
 }

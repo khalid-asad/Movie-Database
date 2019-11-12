@@ -8,13 +8,12 @@
 
 import UIKit
 
+// MARK: - Main View Controller Class
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     private var model: MovieModel!
     private var tableView: UITableView!
     private var refreshControl: UIRefreshControl!
-    private var tableData: [AnyObject]!
-    private var cache: NSCache<AnyObject, AnyObject>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,18 +25,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData.count
+        return model.tableData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
-            let dictionary = tableData[(indexPath as NSIndexPath).row] as? [String: AnyObject]
+            let dictionary = model.tableData[(indexPath as NSIndexPath).row] as? [String: AnyObject]
         else { return UITableViewCell() }
         cell.movieNameLabel.text = dictionary["trackName"] as? String
-        cell.movieImageView.image = UIImage(named: "placeholder")
+        cell.movieImageView.image = UIImage(named: "")
         
-        guard cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {
-            cell.movieImageView.image = self.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) as? UIImage
+        guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {
+            cell.movieImageView.image = model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) as? UIImage
             return cell
         }
         
@@ -50,7 +49,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             DispatchQueue.main.async(execute: { () -> Void in
                 if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
                     updateCell.movieImageView.image = cellImage
-                    self.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
+                    self.model.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
                 }
             })
         })
@@ -88,19 +87,18 @@ extension ViewController {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(reloadTableView), for: .valueChanged)
         tableView.refreshControl = self.refreshControl
-                
-        tableData = []
-        cache = NSCache()
+               
+        model.cache = NSCache()
+        model.tableData = []
     }
     
     @objc
     private func reloadTableView() {
         // TODO - Fix this query
-        model.fetchQuery("", completion: { [weak self] result in
+        model.fetchQuery("flappy&entity=software", completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let data):
-                self.tableData = data
+            case .success:
                 self.reloadData()
             case .failure(let error):
                 print("Error: \(String(describing: error))")

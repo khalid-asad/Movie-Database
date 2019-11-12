@@ -9,7 +9,11 @@
 import Foundation
 import UIKit
 
+// MARK: - Movie Model Class
 final class MovieModel {
+    
+    var tableData: [AnyObject]!
+    var cache: NSCache<AnyObject, AnyObject>!
     
     private var stackableItem: [MovieInfo] = [
         MovieInfo(name: "Terminator", date: "2019-07-05", image: "terminator"),
@@ -28,23 +32,24 @@ final class MovieModel {
     }
 }
 
-public enum FetchInfoState<T, U> {
-    case success(T)
-    case failure(U)
+public enum FetchInfoState<T> {
+    case success
+    case failure(T)
 }
 
 // MARK: - Network Requests
 extension MovieModel {
     
-    func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<[AnyObject]?, Error?>) -> Void) {
-        guard let url = URL(string: "https://itunes.apple.com/search?term=flappy&entity=software") else { return }
-        URLSession.shared.downloadTask(with: url, completionHandler: { (url: URL?, response: URLResponse?, error: Error?) -> Void in
-            guard let url = url else { return }
+    func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<Error?>) -> Void) {
+        guard let url = URL(string: "https://itunes.apple.com/search?term=\(term)") else { return }
+        URLSession.shared.downloadTask(with: url, completionHandler: { [weak self] (url: URL?, response: URLResponse?, error: Error?) -> Void in
+            guard let self = self, let url = url else { return }
             do {
                 guard let data = try? Data(contentsOf: url) else { return }
                 let dic = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as AnyObject
                 let result = dic.value(forKey : "results") as? [AnyObject]
-                completion(.success(result))
+                self.tableData = result
+                completion(.success)
             } catch {
                 print("Error: \(error)")
                 completion(.failure(error))
@@ -53,11 +58,8 @@ extension MovieModel {
     }
     
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
-        URLSession.shared.downloadTask(with: url, completionHandler: { [weak self] (location, response, error) -> Void in
-            guard let self = self,
-                let data = try? Data(contentsOf: url),
-                let cellImage = UIImage(data: data)
-            else {
+        URLSession.shared.downloadTask(with: url, completionHandler: { (location, response, error) -> Void in
+            guard let data = try? Data(contentsOf: url), let cellImage = UIImage(data: data) else {
                 completion(nil)
                 return
             }

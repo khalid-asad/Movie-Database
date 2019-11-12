@@ -82,12 +82,16 @@ extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text == nil { model.cache.removeAllObjects() }
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
         self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.5)
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        searchQuery = searchBar.scopeButtonTitles![selectedScope]
+        guard let scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
+        searchBar.text = scopeText
+        if scopeText != searchQuery { model.cache.removeAllObjects() }
+        searchQuery = scopeText
         reloadTableView()
     }
 }

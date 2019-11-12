@@ -20,3 +20,9 @@ struct MovieInfo: Codable {
         case image
     }
 }
+
+enum PopularMovies: String, CaseIterable {
+    case goodBoys = "Good Boys"
+    case joker = "Joker"
+    case terminator = "Terminator"
+}

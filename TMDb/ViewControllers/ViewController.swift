@@ -71,21 +71,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 }
 
 // MARK: - Search Controller
-extension ViewController: UISearchResultsUpdating {
+extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         guard let searchBarText = searchBar.text else { return }
+        if searchBarText != searchQuery { model.cache.removeAllObjects() }
         searchQuery = searchBarText
         reloadTableView()
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
         self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.5)
     }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        searchQuery = searchBar.scopeButtonTitles![selectedScope]
+        reloadTableView()
+    }
 }
-
 // MARK: - Private Methods
 extension ViewController {
     
@@ -125,6 +130,8 @@ extension ViewController {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Movies"
+        searchController.searchBar.scopeButtonTitles = PopularMovies.allCases.map { $0.rawValue }
+        searchController.searchBar.delegate = self
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
@@ -132,7 +139,7 @@ extension ViewController {
     @objc
     private func reloadTableView() {
         // TODO - Fix this query
-        model.fetchQuery(searchQuery ?? "" + "&entity=software", completion: { [weak self] result in
+        model.fetchQuery(searchQuery?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "" + "&entity=software", completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

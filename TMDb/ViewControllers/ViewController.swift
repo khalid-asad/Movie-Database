@@ -14,6 +14,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var model: MovieModel!
     private var tableView: UITableView!
     private var refreshControl: UIRefreshControl!
+    private var searchController: UISearchController!
+    
+    private var searchQuery: String?
+    
+    var isSearchBarEmpty: Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,16 +32,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         model = MovieModel()
 
         setupTableView()
+        setupSearchController()
         reloadTableView()
     }
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return model.tableData.count
+        return model.items.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
-            let dictionary = model.tableData[(indexPath as NSIndexPath).row] as? [String: AnyObject]
+            let dictionary = model.items[(indexPath as NSIndexPath).row] as? [String: AnyObject]
         else { return UITableViewCell() }
         cell.movieNameLabel.text = dictionary["trackName"] as? String
         cell.movieImageView.image = UIImage(named: "")
@@ -59,6 +67,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         })
         
         return cell
+    }
+}
+
+// MARK: - Search Controller
+extension ViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        guard let searchBarText = searchBar.text else { return }
+        searchQuery = searchBarText
+        reloadTableView()
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
+        self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.5)
     }
 }
 
@@ -93,13 +117,22 @@ extension ViewController {
         tableView.refreshControl = self.refreshControl
                
         model.cache = NSCache()
-        model.tableData = []
+        model.items = []
+    }
+    
+    private func setupSearchController() {
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Movies"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
     
     @objc
     private func reloadTableView() {
         // TODO - Fix this query
-        model.fetchQuery("flappy&entity=software", completion: { [weak self] result in
+        model.fetchQuery(searchQuery ?? "" + "&entity=software", completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

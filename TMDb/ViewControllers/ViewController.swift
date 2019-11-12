@@ -18,12 +18,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "TMDb"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.backgroundColor = ThemeManager().navigationBarColor
+        
         model = MovieModel()
 
         setupTableView()
         reloadTableView()
     }
-    
+        
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return model.tableData.count
     }

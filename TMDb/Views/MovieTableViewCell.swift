@@ -19,7 +19,8 @@ class MovieTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        movieImageView.backgroundColor = .blue
+        backgroundColor = ThemeManager().tableViewCellColor
+        
         movieImageView.contentMode = .scaleAspectFit
         
         [movieImageView, movieNameLabel, movieDateLabel].forEach() {
@@ -35,6 +36,8 @@ class MovieTableViewCell: UITableViewCell {
             $0.numberOfLines = 0
         }
         
+        movieDateLabel.text = "placeholder"
+        
         let viewsDict = [
             "movieImage": movieImageView,
             "movieName": movieNameLabel,
@@ -43,8 +46,8 @@ class MovieTableViewCell: UITableViewCell {
 
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[movieImage]|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[movieName]-(4)-[movieDate]-(>=8)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[movieImage(<=128)]-(16)-[movieName]-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[movieImage(<=128)]-(16)-[movieDate]-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[movieImage(128)]-(16)-[movieName]-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[movieImage(128)]-(16)-[movieDate]-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {

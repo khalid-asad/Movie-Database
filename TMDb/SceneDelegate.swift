@@ -21,7 +21,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         let navigationController = UINavigationController(rootViewController: ViewController())
         window?.rootViewController = navigationController
+        
         window?.backgroundColor = .white
+        
+        
+        if let statusBarFrame = window?.windowScene?.statusBarManager?.statusBarFrame {
+            let statusBar = UIView()
+            statusBar.frame = statusBarFrame
+            statusBar.backgroundColor = ThemeManager().navigationBarColor
+            window?.addSubview(statusBar)
+        }
+        
+        UINavigationBar.appearance().barTintColor = ThemeManager().navigationBarColor
+        
         window?.makeKeyAndVisible()
     }
 

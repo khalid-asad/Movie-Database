@@ -41,6 +41,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
             let dictionary = model.items[(indexPath as NSIndexPath).row] as? [String: AnyObject]
         else { return UITableViewCell() }
         cell.movieNameLabel.text = dictionary["title"] as? String
+        cell.movieDescriptionLabel.text = dictionary["overview"] as? String
         cell.movieImageView.image = UIImage(named: "")
         
         guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {

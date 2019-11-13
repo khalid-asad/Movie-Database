@@ -17,11 +17,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var searchController: UISearchController!
     
     private var searchQuery: String?
-    
-    var isSearchBarEmpty: Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,23 +72,18 @@ extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         guard let searchBarText = searchBar.text else { return }
-        if searchBarText != searchQuery { model.cache.removeAllObjects() }
-        searchQuery = searchBarText
-        reloadTableView()
+        search(for: searchBarText)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text == nil { model.cache.removeAllObjects() }
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
-        self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.5)
+        guard let searchBarText = searchBar.text else { return }
+        search(for: searchBarText)
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         guard let scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
         searchBar.text = scopeText
-        if scopeText != searchQuery { model.cache.removeAllObjects() }
-        searchQuery = scopeText
-        reloadTableView()
+        search(for: scopeText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -156,10 +147,27 @@ extension ViewController {
         definesPresentationContext = true
     }
     
+    private func search(for text: String) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
+        if text != searchQuery || text.isEmpty {
+            model.items.removeAll()
+            model.cache.removeAllObjects()
+        }
+        searchQuery = text
+        self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.25)
+    }
+    
     @objc
     private func reloadTableView() {
+        guard let searchQuery = searchQuery else { return }
+        guard !searchQuery.isEmpty else {
+            model.items.removeAll()
+            model.cache.removeAllObjects()
+            reloadData()
+            return
+        }
         // TODO - Fix this query
-        model.fetchQuery(searchQuery?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "" + "&entity=software", completion: { [weak self] result in
+        model.fetchQuery(searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "" + "&entity=software", completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

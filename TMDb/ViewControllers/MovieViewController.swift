@@ -49,9 +49,10 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         else { return cell }
         
         model.fetchImage(url: url, completion: { [weak self] cellImage in
-            guard let self = self, let cellImage = cellImage else { return }
+            guard let self = self else { return }
             DispatchQueue.main.async(execute: { () -> Void in
                 if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
+                    guard let cellImage = cellImage ?? UIImage(named: "default") else { return }
                     updateCell.movieImageView.image = cellImage
                     self.model.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
                 }
@@ -186,7 +187,7 @@ extension MovieViewController {
     // Reload the table view by fetching the search query
     @objc
     private func reloadTableView() {
-        // If search query is non-existen then wipe the data and cache and return
+        // If search query is non-existent then wipe the data and cache and return
         guard let searchQuery = searchQuery else { return }
         guard !searchQuery.isEmpty else {
             clearDataAndCache()

@@ -10,9 +10,7 @@ import Foundation
 import UIKit
 
 struct ThemeManager {
-    
-    var isDarkModeEnabled: Bool = false
-    
+        
     // MARK: - Fonts
     var headerFont: UIFont {
         guard let font = UIFont(name: "Helvetica-Bold", size: 32) else { return UIFont.systemFont(ofSize: 32, weight: .bold)}
@@ -47,27 +45,7 @@ struct ThemeManager {
     var lightColor: UIColor {
         return .white
     }
-    
-    var primaryFontColor: UIColor {
-        return isDarkModeEnabled ? lightColor : darkColor
-    }
-    
-    var secondaryFontColor: UIColor {
-        return isDarkModeEnabled ? darkColor : lightColor
-    }
-    
-    var primaryBackgroundColor: UIColor {
-        return isDarkModeEnabled ? darkColor : lightColor
-    }
-    
-    var secondaryBackgroundColor: UIColor {
-        return isDarkModeEnabled ? lightColor : darkColor
-    }
-    
-    var imageTintColor: UIColor {
-        return isDarkModeEnabled ? lightColor : darkColor
-    }
-    
+        
     var navigationBarColor: UIColor {
         return UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
     }

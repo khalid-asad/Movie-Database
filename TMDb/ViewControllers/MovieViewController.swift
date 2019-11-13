@@ -68,11 +68,13 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         guard let searchBarText = searchBar.text else { return }
+        // Search with the text from the Search Bar
         search(for: searchBarText)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchBarText = searchBar.text else { return }
+        // Search with the text from the Search Bar
         search(for: searchBarText)
     }
     
@@ -80,6 +82,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         guard var scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
         if scopeText == PopularMovies.all.rawValue { scopeText = searchBar.text ?? "" }
         searchBar.text = scopeText
+        // Search with the text from the Scope under the Search Bar
         search(for: scopeText)
     }
     
@@ -99,9 +102,11 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         searchBar.showsCancelButton = false
     }
 }
+
 // MARK: - Private Methods
 extension MovieViewController {
     
+    // Asynchronously reload the tableView data and end refreshing
     private func reloadData() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -109,6 +114,7 @@ extension MovieViewController {
         }
     }
     
+    // Configure the navigation bar theme
     private func configureNavigationBar() {
         guard let navigationController = navigationController else { return }
         let navigationBar = navigationController.navigationBar
@@ -119,30 +125,37 @@ extension MovieViewController {
         title = "TMDb"
     }
     
+    // Configure the Table View
     private func configureTableView() {
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = view.frame.width
         let displayHeight: CGFloat = view.frame.height
         
+        // Set the table view within the frame
         tableView = UITableView(frame: CGRect(x: 0, y: barHeight, width: displayWidth, height: displayHeight))
         tableView.register(MovieTableViewCell.classForCoder(), forCellReuseIdentifier: "MyCell")
 
+        // Estimate a row height of 44
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         
+        // Set the data source and delegate to the current VC
         tableView.dataSource = self
         tableView.delegate = self
         
         view.addSubview(tableView)
-                        
+        
+        // Create a refresh control and target it to the reloadTableView function for any values changed
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(reloadTableView), for: .valueChanged)
         tableView.refreshControl = self.refreshControl
-               
+        
+        // Set the initial cache and data within the model to be empty
         model.cache = NSCache()
         model.items = []
     }
     
+    // Configures the Search Controller in the Navigation bar
     private func configureSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -155,26 +168,32 @@ extension MovieViewController {
         definesPresentationContext = true
     }
     
+    // Function to search by cancelling previous requests, and creating a new one
     private func search(for text: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
-        if text != searchQuery || text.isEmpty {
-            model.items.removeAll()
-            model.cache.removeAllObjects()
-        }
+        if text != searchQuery || text.isEmpty { clearDataAndCache() }
         searchQuery = text
         self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.25)
     }
     
+    // Clears the cache in the model, then reloads the data in the table view
+    private func clearDataAndCache() {
+        model.items.removeAll()
+        model.cache.removeAllObjects()
+        reloadData()
+    }
+    
+    // Reload the table view by fetching the search query
     @objc
     private func reloadTableView() {
+        // If search query is non-existen then wipe the data and cache and return
         guard let searchQuery = searchQuery else { return }
         guard !searchQuery.isEmpty else {
-            model.items.removeAll()
-            model.cache.removeAllObjects()
-            reloadData()
+            clearDataAndCache()
             return
         }
-        // TODO - Fix this query
+
+        // Fetch the search results from the API through the model
         model.fetchQuery(searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "" + "&entity=software", completion: { [weak self] result in
             guard let self = self else { return }
             switch result {

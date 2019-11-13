@@ -24,6 +24,7 @@ public enum FetchInfoState<T> {
 // MARK: - Network Requests
 extension MovieModel {
     
+    // Fetch the query search term against the API through URLSession downloadTask
     func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<Error?>) -> Void) {
         guard let url = URL(string: "https://itunes.apple.com/search?term=\(term)") else { return }
         URLSession.shared.downloadTask(with: url, completionHandler: { [weak self] (url: URL?, response: URLResponse?, error: Error?) -> Void in
@@ -41,6 +42,7 @@ extension MovieModel {
         }).resume()
     }
     
+    // Download the image
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
         URLSession.shared.downloadTask(with: url, completionHandler: { (location, response, error) -> Void in
             guard let data = try? Data(contentsOf: url), let cellImage = UIImage(data: data) else {

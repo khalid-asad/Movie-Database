@@ -17,7 +17,9 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     private var searchController: UISearchController!
     
     private var searchQuery: String?
-        
+    
+    private let placeHolderImage = UIImage(named: "default")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                         
@@ -52,7 +54,11 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         guard let artworkUrl = dictionary["backdrop_path"] as? String,
             let url = URL(string: StringKey.imageBaseURL.rawValue + artworkUrl)
         else {
-//            cell.imageView?.image = UIImage(named: "default")
+            // Removed Placeholder image because it was overriding the Downlaoded image
+//            if let defaultImage = placeHolderImage {
+//                cell.imageView?.image = defaultImage
+//                model.cache.setObject(defaultImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
+//            }
             return cell
         }
         
@@ -60,7 +66,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
             guard let self = self else { return }
             DispatchQueue.main.async(execute: { () -> Void in
                 if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
-                    guard let cellImage = cellImage ?? UIImage(named: "default") else { return }
+                    guard let cellImage = cellImage else { return }
                     updateCell.movieImageView.image = cellImage
                     self.model.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
                 }
@@ -84,6 +90,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchBarText = searchBar.text else { return }
         // Search with the text from the Search Bar
+        clearDataAndCache()
         search(for: searchBarText)
     }
     

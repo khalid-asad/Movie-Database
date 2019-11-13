@@ -16,41 +16,40 @@ final class MovieModel {
     var cache: NSCache<AnyObject, AnyObject>!
 }
 
-public enum FetchInfoState<T> {
-    case success
-    case failure(T)
+public enum FetchInfoState<T, U> {
+    case success(T)
+    case failure(U)
 }
 
 // MARK: - Network Requests
 extension MovieModel {
     
     // Fetch the query search term against the API through URLSession downloadTask
-    func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<Error?>) -> Void) {
+    func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
         guard let url = URL(string: StringKeyFormatter.searchURL(query: term).rawValue) else {
             completion(.failure(nil))
             return
         }
         
-        URLSession.shared.downloadTask(with: url, completionHandler: { [weak self] (url: URL?, response: URLResponse?, error: Error?) -> Void in
-            guard let self = self, let url = url else { return }
-            do {
-                guard let data = try? Data(contentsOf: url) else {
-                    completion(.failure(nil))
-                    return
-                }
-                
-                // Decode the JSON into a Codable object of MovieSearchQuery
-                let result = try JSONDecoder().decode(MovieSearchQuery.self, from: data)
-                dump(result)
-                
-                // Set the items variable in the class and return
-                self.items = result.results
-                completion(.success)
-            } catch {
-                print("Error: \(error)")
-                completion(.failure(error))
+        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
+            dump(response)
+            guard let self = self, let data = data else {
+                completion(.failure(nil))
+                return
             }
-        }).resume()
+            
+            do {
+                let responseData = try JSONDecoder().decode(MovieSearchQuery.self, from: data)
+                dump(responseData)
+                print(responseData)
+                
+                self.items = responseData.results
+                completion(.success(responseData))
+            } catch let err {
+                print("Err", err)
+                completion(.failure(err))
+            }
+        }.resume()
     }
     
     // Download the image

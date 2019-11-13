@@ -20,16 +20,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        title = "TMDb"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.backgroundColor = ThemeManager().navigationBarColor
-        
+                        
         model = MovieModel()
 
-        setupTableView()
-        setupSearchController()
-        reloadTableView()
+        configureNavigationBar()
+        configureTableView()
+        configureSearchController()
     }
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -112,7 +108,17 @@ extension ViewController {
         }
     }
     
-    private func setupTableView() {
+    private func configureNavigationBar() {
+        guard let navigationController = navigationController else { return }
+        let navigationBar = navigationController.navigationBar
+        
+        navigationBar.prefersLargeTitles = true
+        navigationBar.backgroundColor = ThemeManager().navigationBarColor
+        
+        title = "TMDb"
+    }
+    
+    private func configureTableView() {
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = view.frame.width
         let displayHeight: CGFloat = view.frame.height
@@ -136,13 +142,14 @@ extension ViewController {
         model.items = []
     }
     
-    private func setupSearchController() {
+    private func configureSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Movies"
         searchController.searchBar.scopeButtonTitles = PopularMovies.allCases.map { $0.rawValue }
         searchController.searchBar.delegate = self
+        
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }

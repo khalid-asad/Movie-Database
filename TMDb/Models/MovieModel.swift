@@ -40,8 +40,7 @@ extension MovieModel {
                 }
                 
                 // Decode the JSON into a Codable object of MovieSearchQuery
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(MovieSearchQuery.self, from: data)
+                let result = try JSONDecoder().decode(MovieSearchQuery.self, from: data)
                 dump(result)
                 
                 // Set the items variable in the class and return

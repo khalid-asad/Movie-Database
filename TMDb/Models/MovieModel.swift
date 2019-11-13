@@ -26,7 +26,7 @@ extension MovieModel {
     
     // Fetch the query search term against the API through URLSession downloadTask
     func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<Error?>) -> Void) {
-        guard let url = URL(string: "https://itunes.apple.com/search?term=\(term)") else { return }
+        guard let url = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=2a61185ef6a27f400fd92820ad9e8537&query=\(term)") else { return }
         URLSession.shared.downloadTask(with: url, completionHandler: { [weak self] (url: URL?, response: URLResponse?, error: Error?) -> Void in
             guard let self = self, let url = url else { return }
             do {

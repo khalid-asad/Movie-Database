@@ -36,7 +36,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
             let dictionary = model.items[(indexPath as NSIndexPath).row] as? [String: AnyObject]
         else { return UITableViewCell() }
-        cell.movieNameLabel.text = dictionary["trackName"] as? String
+        cell.movieNameLabel.text = dictionary["title"] as? String
         cell.movieImageView.image = UIImage(named: "")
         
         guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {
@@ -44,9 +44,12 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
             return cell
         }
         
-        guard let artworkUrl = dictionary["artworkUrl100"] as? String,
-            let url = URL(string: artworkUrl)
-        else { return cell }
+        guard let artworkUrl = dictionary["backdrop_path"] as? String,
+            let url = URL(string: StringKey.imageBaseURL.rawValue + artworkUrl)
+        else {
+            cell.imageView?.image = UIImage(named: "default")
+            return cell
+        }
         
         model.fetchImage(url: url, completion: { [weak self] cellImage in
             guard let self = self else { return }
@@ -195,7 +198,7 @@ extension MovieViewController {
         }
 
         // Fetch the search results from the API through the model
-        model.fetchQuery(searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "" + "&entity=software", completion: { [weak self] result in
+        model.fetchQuery(searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "", completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

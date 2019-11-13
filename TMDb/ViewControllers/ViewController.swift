@@ -77,7 +77,8 @@ extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        guard let scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
+        guard var scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
+        if scopeText == PopularMovies.all.rawValue { scopeText = searchBar.text ?? "" }
         searchBar.text = scopeText
         search(for: scopeText)
     }

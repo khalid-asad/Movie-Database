@@ -19,7 +19,7 @@ class MovieTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        backgroundColor = ThemeManager().tableViewCellColor
+        backgroundColor = .clear
         
         movieImageView.contentMode = .scaleAspectFit
         

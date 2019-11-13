@@ -11,7 +11,7 @@ import UIKit
 
 struct ThemeManager {
     
-    var isDarkModeEnabled: Bool = true
+    var isDarkModeEnabled: Bool = false
     
     // MARK: - Fonts
     var headerFont: UIFont {

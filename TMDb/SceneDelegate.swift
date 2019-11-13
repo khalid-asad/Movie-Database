@@ -22,8 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController(rootViewController: ViewController())
         window?.rootViewController = navigationController
         
-        window?.backgroundColor = .white
-        
+        window?.backgroundColor = (window?.traitCollection.userInterfaceStyle == .light || window?.traitCollection.userInterfaceStyle == .unspecified) ? ThemeManager().lightColor : ThemeManager().darkColor
         
         if let statusBarFrame = window?.windowScene?.statusBarManager?.statusBarFrame {
             let statusBar = UIView()

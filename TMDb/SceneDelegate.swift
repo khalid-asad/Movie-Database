@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        let navigationController = UINavigationController(rootViewController: ViewController())
+        let navigationController = UINavigationController(rootViewController: MovieViewController())
         window?.rootViewController = navigationController
         
         window?.backgroundColor = (window?.traitCollection.userInterfaceStyle == .light || window?.traitCollection.userInterfaceStyle == .unspecified) ? ThemeManager().lightColor : ThemeManager().darkColor

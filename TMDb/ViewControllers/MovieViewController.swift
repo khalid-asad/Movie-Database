@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MovieViewController.swift
 //  TMDb
 //
 //  Created by Khalid Asad on 11/11/19.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-// MARK: - Main View Controller Class
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+// MARK: - Movie View Controller Class
+final class MovieViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     private var model: MovieModel!
     private var tableView: UITableView!
@@ -63,7 +63,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 }
 
 // MARK: - Search Controller
-extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
+extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
@@ -100,7 +100,7 @@ extension ViewController: UISearchResultsUpdating, UISearchBarDelegate {
     }
 }
 // MARK: - Private Methods
-extension ViewController {
+extension MovieViewController {
     
     private func reloadData() {
         DispatchQueue.main.async {

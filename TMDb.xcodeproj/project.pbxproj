@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1930F49E237A49C80053F37C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F49D237A49C80053F37C /* AppDelegate.swift */; };
 		1930F4A0237A49C80053F37C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F49F237A49C80053F37C /* SceneDelegate.swift */; };
-		1930F4A2237A49C80053F37C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F4A1237A49C80053F37C /* ViewController.swift */; };
+		1930F4A2237A49C80053F37C /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F4A1237A49C80053F37C /* MovieViewController.swift */; };
 		1930F4A7237A49CA0053F37C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1930F4A6237A49CA0053F37C /* Assets.xcassets */; };
 		1930F4AA237A49CA0053F37C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1930F4A8237A49CA0053F37C /* LaunchScreen.storyboard */; };
 		1930F4B5237A49CA0053F37C /* TMDbTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F4B4237A49CA0053F37C /* TMDbTests.swift */; };
@@ -33,7 +33,7 @@
 		1930F49A237A49C70053F37C /* TMDb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1930F49D237A49C80053F37C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1930F49F237A49C80053F37C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1930F4A1237A49C80053F37C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1930F4A1237A49C80053F37C /* MovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		1930F4A6237A49CA0053F37C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1930F4A9237A49CA0053F37C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1930F4AB237A49CA0053F37C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -136,7 +136,7 @@
 		19BD1121237A5353000268CD /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				1930F4A1237A49C80053F37C /* ViewController.swift */,
+				1930F4A1237A49C80053F37C /* MovieViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -251,7 +251,7 @@
 				19BD1120237A4D82000268CD /* MovieInfo.swift in Sources */,
 				19BD111B237A4CB0000268CD /* MovieTableViewCell.swift in Sources */,
 				19BD1118237A4BC9000268CD /* MovieModel.swift in Sources */,
-				1930F4A2237A49C80053F37C /* ViewController.swift in Sources */,
+				1930F4A2237A49C80053F37C /* MovieViewController.swift in Sources */,
 				1930F49E237A49C80053F37C /* AppDelegate.swift in Sources */,
 				1930F4A0237A49C80053F37C /* SceneDelegate.swift in Sources */,
 				19BD111E237A4D1E000268CD /* ThemeManager.swift in Sources */,

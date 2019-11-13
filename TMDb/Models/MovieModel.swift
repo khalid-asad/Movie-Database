@@ -12,7 +12,7 @@ import UIKit
 // MARK: - Movie Model Class
 final class MovieModel {
     
-    var items: [AnyObject]!
+    var items: [MovieSearchResult]!
     var cache: NSCache<AnyObject, AnyObject>!
 }
 
@@ -26,14 +26,26 @@ extension MovieModel {
     
     // Fetch the query search term against the API through URLSession downloadTask
     func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<Error?>) -> Void) {
-        guard let url = URL(string: StringKeyFormatter.searchURL(query: term).rawValue) else { return }
+        guard let url = URL(string: StringKeyFormatter.searchURL(query: term).rawValue) else {
+            completion(.failure(nil))
+            return
+        }
+        
         URLSession.shared.downloadTask(with: url, completionHandler: { [weak self] (url: URL?, response: URLResponse?, error: Error?) -> Void in
             guard let self = self, let url = url else { return }
             do {
-                guard let data = try? Data(contentsOf: url) else { return }
-                let dic = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as AnyObject
-                let result = dic.value(forKey : "results") as? [AnyObject]
-                self.items = result
+                guard let data = try? Data(contentsOf: url) else {
+                    completion(.failure(nil))
+                    return
+                }
+                
+                // Decode the JSON into a Codable object of MovieSearchQuery
+                let decoder = JSONDecoder()
+                let result = try decoder.decode(MovieSearchQuery.self, from: data)
+                dump(result)
+                
+                // Set the items variable in the class and return
+                self.items = result.results
                 completion(.success)
             } catch {
                 print("Error: \(error)")

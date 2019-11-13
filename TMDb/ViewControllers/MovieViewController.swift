@@ -39,11 +39,10 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
-            let dictionary = model.items[(indexPath as NSIndexPath).row] as? [String: AnyObject]
-        else { return UITableViewCell() }
-        cell.movieNameLabel.text = dictionary["title"] as? String
-        cell.movieDescriptionLabel.text = dictionary["overview"] as? String
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell else { return UITableViewCell() }
+        let movie = model.items[(indexPath as NSIndexPath).row]
+        cell.movieNameLabel.text = movie.title
+        cell.movieDescriptionLabel.text = movie.overview
         cell.movieImageView.image = UIImage(named: "")
         
         guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {
@@ -51,8 +50,8 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
             return cell
         }
         
-        guard let artworkUrl = dictionary["backdrop_path"] as? String,
-            let url = URL(string: StringKey.imageBaseURL.rawValue + artworkUrl)
+        guard let backdropPath = movie.backdropPath,
+            let url = URL(string: StringKey.imageBaseURL.rawValue + backdropPath)
         else {
             // Removed Placeholder image because it was overriding the Downlaoded image
 //            if let defaultImage = placeHolderImage {

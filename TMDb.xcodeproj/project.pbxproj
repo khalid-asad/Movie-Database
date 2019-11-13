@@ -18,6 +18,7 @@
 		19BD111E237A4D1E000268CD /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19BD111D237A4D1E000268CD /* ThemeManager.swift */; };
 		19BD1120237A4D82000268CD /* MovieInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19BD111F237A4D82000268CD /* MovieInfo.swift */; };
 		19FE7307237BC400002B68D0 /* StringKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FE7306237BC400002B68D0 /* StringKey.swift */; };
+		19FE730A237BCCF3002B68D0 /* queryResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 19FE7309237BCCF3002B68D0 /* queryResponse.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		19BD111D237A4D1E000268CD /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		19BD111F237A4D82000268CD /* MovieInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInfo.swift; sourceTree = "<group>"; };
 		19FE7306237BC400002B68D0 /* StringKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringKey.swift; sourceTree = "<group>"; };
+		19FE7309237BCCF3002B68D0 /* queryResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = queryResponse.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 		1930F4B3237A49CA0053F37C /* TMDbTests */ = {
 			isa = PBXGroup;
 			children = (
+				19FE7308237BCCCC002B68D0 /* Mock */,
 				1930F4B4237A49CA0053F37C /* TMDbTests.swift */,
 				1930F4B6237A49CA0053F37C /* Info.plist */,
 			);
@@ -149,6 +152,14 @@
 				19FE7306237BC400002B68D0 /* StringKey.swift */,
 			);
 			path = StringKey;
+			sourceTree = "<group>";
+		};
+		19FE7308237BCCCC002B68D0 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				19FE7309237BCCF3002B68D0 /* queryResponse.json */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,6 +252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19FE730A237BCCF3002B68D0 /* queryResponse.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

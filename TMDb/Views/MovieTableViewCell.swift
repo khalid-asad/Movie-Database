@@ -14,7 +14,7 @@ class MovieTableViewCell: UITableViewCell {
 
     let movieImageView = UIImageView()
     let movieNameLabel = UILabel()
-    let movieDateLabel = UILabel()
+    let movieDescriptionLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,27 +26,29 @@ class MovieTableViewCell: UITableViewCell {
         movieImageView.image = UIImage(named: "default")
         
         // Add the views
-        [movieImageView, movieNameLabel, movieDateLabel].forEach() {
+        [movieImageView, movieNameLabel, movieDescriptionLabel].forEach() {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
         
         // Set font for labels using a custom Theme Manager
         movieNameLabel.font = ThemeManager().titleFont
-        movieDateLabel.font = ThemeManager().subTitleFont
+        movieDescriptionLabel.font = ThemeManager().subTitleFont
         
         // Ensure the labels can handle multiple lines
-        [movieNameLabel, movieDateLabel].forEach() {
-            $0.lineBreakMode = .byWordWrapping
+        [movieNameLabel, movieDescriptionLabel].forEach() {
+            $0.textColor = ThemeManager().darkColor
             $0.numberOfLines = 0
         }
         
-        movieDateLabel.text = "placeholder"
+        movieNameLabel.lineBreakMode = .byWordWrapping
+        
+        movieDescriptionLabel.text = "placeholder"
         
         let viewsDict = [
             "movieImage": movieImageView,
             "movieName": movieNameLabel,
-            "movieDate": movieDateLabel,
+            "movieDesc": movieDescriptionLabel,
         ]
         
         /* Programmatically set the layout to
@@ -55,9 +57,9 @@ class MovieTableViewCell: UITableViewCell {
             ...     ...             ...     ...
          */
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[movieImage]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[movieName]-(4)-[movieDate]-(>=8)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-[movieName]-(4)-[movieDesc]-(>=8)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[movieImage(128)]-(16)-[movieName]-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[movieImage(128)]-(16)-[movieDate]-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[movieImage(128)]-(16)-[movieDesc]-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {

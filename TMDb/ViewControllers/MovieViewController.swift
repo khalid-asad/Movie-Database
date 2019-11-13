@@ -27,6 +27,10 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         configureTableView()
         configureSearchController()
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+       return 128
+    }
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return model.items.count
@@ -47,7 +51,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         guard let artworkUrl = dictionary["backdrop_path"] as? String,
             let url = URL(string: StringKey.imageBaseURL.rawValue + artworkUrl)
         else {
-            cell.imageView?.image = UIImage(named: "default")
+//            cell.imageView?.image = UIImage(named: "default")
             return cell
         }
         

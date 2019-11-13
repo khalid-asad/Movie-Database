@@ -50,6 +50,10 @@ struct ThemeManager {
         return UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
     }
     
+    var textColor: UIColor {
+        return UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
+    }
+    
     var tableViewCellColor: UIColor {
         return .white
     }

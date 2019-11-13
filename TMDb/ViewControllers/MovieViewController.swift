@@ -198,7 +198,7 @@ extension MovieViewController {
         }
 
         // Fetch the search results from the API through the model
-        model.fetchQuery(searchQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "", completion: { [weak self] result in
+        model.fetchQuery(searchQuery, completion: { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:

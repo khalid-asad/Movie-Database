@@ -96,11 +96,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
     // Protocol function for Scopes (so we can sort by Genres)
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-//        guard var scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
-//        if scopeText == Genres.all.name { scopeText = searchBar.text ?? "" }
-//        searchBar.text = scopeText
         searchScope = Genres.allCases[selectedScope]
-        // Search with the text from the Scope under the Search Bar
         search(for: searchBar.text ?? "")
     }
     

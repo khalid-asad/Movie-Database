@@ -22,7 +22,7 @@ public enum FetchInfoState<T, U> {
 }
 
 // MARK: - Network Requests
-extension MovieModel {
+extension MovieModel: NetworkRequestProtocol {
     
     // Fetch the query search term against the API through URLSession downloadTask
     func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {

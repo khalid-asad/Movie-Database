@@ -10,13 +10,6 @@ import XCTest
 @testable import TMDb
 
 class TMDbTests: XCTestCase {
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
     
     func testMovieSearchQueryObject() {
         if let data = getData(name: "queryResponse") {
@@ -67,39 +60,41 @@ class TMDbTests: XCTestCase {
     
     func testMovieModel() {
         let model = MovieModel()
-        
+
         // Given a fake API key
         let baseURL = "https://api.themoviedb.org/3/search/movie?api_key="
         var apiKey = "0"
         let queryURL = "&query="
         let query = "Harry Potter"
-        
+
         // When the query is a valid Percent encoded string
         var percentEncodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         XCTAssertEqual(percentEncodedQuery, "Harry%20Potter")
-        
+
         var searchURL = baseURL + apiKey + queryURL + percentEncodedQuery
-        
+
         var ex = expectation(description: "Waiting for fetch call to fail.")
+        
         // Then the fetch query call should not fail, instead return 0 results
-        model.fetchQuery(searchURL, completion: { result in
+        MockNetworkRequest(error: .unauthorized).fetchQuery(searchURL, completion: { result in
             switch result {
-            case .success(let data):
-                XCTAssertEqual(data?.results.count, 0)
+            case .success:
+                XCTFail("This test case should fail because there is an incorrect API key.")
+            case .failure(let error):
+                XCTAssertEqual(error?.localizedDescription, MockNetworkRequest.MockError.unauthorized.localizedDescription)
                 ex.fulfill()
-            case .failure:
-                XCTFail("This test case should not fail even though there is an incorrect API key.")
             }
         })
         self.wait(for: [ex], timeout: 5)
-        
+
         // Given a valid API key
         apiKey = "2a61185ef6a27f400fd92820ad9e8537"
         searchURL = baseURL + apiKey + queryURL + percentEncodedQuery
-        
+
         ex = expectation(description: "Waiting for fetch call to succeed.")
+        
         // Then the fetch query call should pass
-        model.fetchQuery(searchURL, completion: { result in
+        MockNetworkRequest().fetchQuery(searchURL, completion: { result in
             switch result {
             case .success(let data):
                 XCTAssertEqual(data?.results.count, 20)
@@ -108,36 +103,36 @@ class TMDbTests: XCTestCase {
                 XCTAssertEqual(data?.totalPages, 2)
                 ex.fulfill()
             case .failure:
-                XCTFail("This test case should not fail due to a correct API key.")
+                XCTFail("This test case should not fail due to a correct API key and good query.")
             }
         })
-        wait(for: [ex], timeout: 10)
-        
-        // Given a valid API key and search term of ""
+        wait(for: [ex], timeout: 5)
+
+        // Given a valid API key, incorrect URL, and search term of ""
         apiKey = "2a61185ef6a27f400fd92820ad9e8537"
         percentEncodedQuery = "".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        searchURL = baseURL + apiKey + queryURL + percentEncodedQuery
-        
+        searchURL = "https://www.fakestdfdsjfURL/" + apiKey + queryURL + percentEncodedQuery
+
         ex = expectation(description: "Waiting for fetch call to succeed.")
-        // Then the fetch query call should pass
+        // Then the fetch query call should fail
         model.fetchQuery(searchURL, completion: { result in
             switch result {
-            case .success(let data):
-                XCTAssertEqual(data?.results.count, 20)
-                XCTAssertEqual(data?.page, 1)
-                XCTAssertEqual(data?.totalResults, 26)
-                XCTAssertEqual(data?.totalPages, 2)
+            case .success:
+                XCTFail("This test case should fail due to an incorrect URL.")
+            case .failure(let error):
+                XCTAssertEqual(error?.localizedDescription, "The data couldn’t be read because it is missing.")
                 ex.fulfill()
-            case .failure:
-                XCTFail("This test case should not fail due to a correct API key.")
             }
         })
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }
 
 extension XCTestCase {
     
+    /// Get the existing file in Data format
+    /// - parameter name: Name of the file.
+    /// - parameter withExtension: The extension in String (e.g. json).
     func getData(name: String, withExtension: String = "json") -> Data? {
         let bundle = Bundle(for: type(of: self))
         guard let fileUrl = bundle.url(forResource: name, withExtension: withExtension), let data = try? Data(contentsOf: fileUrl) else { return nil }

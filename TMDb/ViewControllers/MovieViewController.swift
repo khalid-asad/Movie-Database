@@ -39,31 +39,29 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell else { return MovieTableViewCell() }
         let movie = model.items[(indexPath as NSIndexPath).row]
         cell.movieNameLabel.text = movie.title
         cell.movieDescriptionLabel.text = movie.overview
-        cell.movieImageView.image = UIImage(named: "")
+        // Set a placeholder image
+        cell.movieImageView.image = placeHolderImage
         
+        // If there is a cached image, set it to the view
         guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {
             cell.movieImageView.image = model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) as? UIImage
             return cell
         }
         
+        // If the url does not exist, simply return the cell
         guard let backdropPath = movie.backdropPath,
             let url = URL(string: StringKey.imageBaseURL.rawValue + backdropPath)
-        else {
-            // Removed Placeholder image because it was overriding the Downlaoded image
-//            if let defaultImage = placeHolderImage {
-//                cell.imageView?.image = defaultImage
-//                model.cache.setObject(defaultImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
-//            }
-            return cell
-        }
+        else { return cell }
         
+        // Download the image, and set it if it's available
         model.fetchImage(url: url, completion: { [weak self] cellImage in
             guard let self = self else { return }
             DispatchQueue.main.async(execute: { () -> Void in
+                // Indirectly access the cell in an Async method to prevent memory leaks
                 if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
                     guard let cellImage = cellImage else { return }
                     updateCell.movieImageView.image = cellImage
@@ -93,6 +91,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         search(for: searchBarText)
     }
     
+    // Protocol function for Scopes (so we can sort by Genres)
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         guard var scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
         if scopeText == PopularMovies.all.rawValue { scopeText = searchBar.text ?? "" }
@@ -186,7 +185,7 @@ extension MovieViewController {
     // Function to search by cancelling previous requests, and creating a new one
     private func search(for text: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
-        if text != searchQuery || text.isEmpty { clearDataAndCache() }
+        clearDataAndCache()
         searchQuery = text
         self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.25)
     }

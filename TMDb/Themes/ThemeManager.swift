@@ -28,7 +28,7 @@ struct ThemeManager {
     }
     
     var subTitleFont: UIFont {
-        guard let font = UIFont(name: "Helvetica", size: 16) else { return UIFont.systemFont(ofSize: 16)}
+        guard let font = UIFont(name: "Helvetica", size: 14) else { return UIFont.systemFont(ofSize: 16)}
         return font
     }
     

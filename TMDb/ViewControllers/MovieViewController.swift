@@ -31,6 +31,18 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         configureSearchController()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        // Upon changing the orientation of the device, reset the size of the tableView
+        tableView.frame = CGRect(
+            x: 0,
+            y: UIApplication.shared.statusBarFrame.size.height,
+            width: view.frame.width,
+            height: view.frame.height
+        )
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
        return 128
     }

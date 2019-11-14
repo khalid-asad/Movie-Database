@@ -69,9 +69,18 @@ struct MovieSearchResult: Codable {
     }
 }
 
-enum PopularMovies: String, CaseIterable {
-    case all = "All"
-    case goodBoys = "Good Boys"
-    case joker = "Joker"
-    case terminator = "Terminator"
+enum Genres: Int, CaseIterable {
+    case all = 0
+    case action = 28
+    case comedy = 35
+    case thriller = 53
+    
+    var name: String {
+        switch self {
+        case .all: return "All"
+        case .action: return "Action"
+        case .comedy: return "Comedy"
+        case .thriller: return "Thriller"
+        }
+    }
 }

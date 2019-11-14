@@ -17,6 +17,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     private var searchController: UISearchController!
     
     private var searchQuery: String?
+    private var searchScope: Genres? = .all
     
     private let placeHolderImage = UIImage(named: "default")
     
@@ -77,6 +78,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
 // MARK: - Search Controller
 extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
+    // Protocol function for searching
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         guard let searchBarText = searchBar.text else { return }
@@ -84,6 +86,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         search(for: searchBarText)
     }
     
+    // Protocol function for text changing, we want to clear the cache and then search
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchBarText = searchBar.text else { return }
         // Search with the text from the Search Bar
@@ -93,11 +96,12 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
     // Protocol function for Scopes (so we can sort by Genres)
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        guard var scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
-        if scopeText == PopularMovies.all.rawValue { scopeText = searchBar.text ?? "" }
-        searchBar.text = scopeText
+//        guard var scopeText = searchBar.scopeButtonTitles?[selectedScope] else { return }
+//        if scopeText == Genres.all.name { scopeText = searchBar.text ?? "" }
+//        searchBar.text = scopeText
+        searchScope = Genres.allCases[selectedScope]
         // Search with the text from the Scope under the Search Bar
-        search(for: scopeText)
+        search(for: searchBar.text ?? "")
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -175,7 +179,7 @@ extension MovieViewController {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Movies"
-        searchController.searchBar.scopeButtonTitles = PopularMovies.allCases.map { $0.rawValue }
+        searchController.searchBar.scopeButtonTitles = Genres.allCases.map { $0.name }
         searchController.searchBar.delegate = self
         
         navigationItem.searchController = searchController
@@ -212,6 +216,11 @@ extension MovieViewController {
             guard let self = self else { return }
             switch result {
             case .success:
+                if let searchScope = self.searchScope, searchScope != .all {
+                    self.model.items = self.model.items.filter {
+                        $0.genreIDs.contains(searchScope.rawValue)
+                    }
+                }
                 self.reloadData()
             case .failure(let error):
                 print("Error: \(String(describing: error))")

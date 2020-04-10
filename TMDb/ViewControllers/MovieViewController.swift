@@ -19,7 +19,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     private var searchQuery: String?
     private var searchScope: Genres? = .all
     
-    private let placeHolderImage = UIImage(named: "default")
+    private static let placeHolderImage = #imageLiteral(resourceName: "default")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,12 +52,16 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell else { return MovieTableViewCell() }
-        let movie = model.items[(indexPath as NSIndexPath).row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
+            let movie = model.items[safe: (indexPath as NSIndexPath).row]
+        else {
+            return MovieTableViewCell()
+        }
+        
         cell.movieNameLabel.text = movie.title
         cell.movieDescriptionLabel.text = movie.overview
         // Set a placeholder image
-        cell.movieImageView.image = placeHolderImage
+        cell.movieImageView.image = MovieViewController.placeHolderImage
         
         // If there is a cached image, set it to the view
         guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {
@@ -73,12 +77,12 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         // Download the image, and set it if it's available
         model.fetchImage(url: url, completion: { [weak self] cellImage in
             guard let self = self else { return }
-            DispatchQueue.main.async(execute: { () -> Void in
+            DispatchQueue.main.async(execute: { [weak self] () -> Void in
                 // Indirectly access the cell in an Async method to prevent memory leaks
                 if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
                     guard let cellImage = cellImage else { return }
                     updateCell.movieImageView.image = cellImage
-                    self.model.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
+                    self?.model.cache.setObject(cellImage, forKey: (indexPath as NSIndexPath).row as AnyObject)
                 }
             })
         })
@@ -134,7 +138,9 @@ extension MovieViewController {
     
     // Asynchronously reload the tableView data and end refreshing
     private func reloadData() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            assert(Thread.isMainThread)
+            guard let self = self else { return }
             self.tableView.reloadData()
             self.tableView.refreshControl?.endRefreshing()
         }
@@ -199,7 +205,7 @@ extension MovieViewController {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
         clearDataAndCache()
         searchQuery = text
-        self.perform(#selector(reloadTableView), with: nil, afterDelay: 0.25)
+        perform(#selector(reloadTableView), with: nil, afterDelay: 0.15)
     }
     
     // Clears the cache in the model, then reloads the data in the table view
@@ -213,8 +219,7 @@ extension MovieViewController {
     @objc
     private func reloadTableView() {
         // If search query is non-existent then wipe the data and cache and return
-        guard let searchQuery = searchQuery else { return }
-        guard !searchQuery.isEmpty else {
+        guard let searchQuery = searchQuery, !searchQuery.isEmpty else {
             clearDataAndCache()
             return
         }

@@ -27,22 +27,16 @@ extension MovieModel: NetworkRequestProtocol {
     // Fetch the query search term against the API through URLSession downloadTask
     func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
         guard let url = URL(string: StringKeyFormatter.searchURL(query: term).rawValue) else {
-            completion(.failure(nil))
-            return
+            return completion(.failure(nil))
         }
         
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            dump(response)
             guard let self = self, let data = data else {
-                completion(.failure(nil))
-                return
+                return completion(.failure(nil))
             }
             
             do {
                 let responseData = try JSONDecoder().decode(MovieSearchQuery.self, from: data)
-                dump(responseData)
-                print(responseData)
-                
                 self.items = responseData.results
                 completion(.success(responseData))
             } catch let err {
@@ -56,8 +50,7 @@ extension MovieModel: NetworkRequestProtocol {
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
         URLSession.shared.downloadTask(with: url, completionHandler: { (location, response, error) -> Void in
             guard let data = try? Data(contentsOf: url), let cellImage = UIImage(data: data) else {
-                completion(nil)
-                return
+                return completion(nil)
             }
             completion(cellImage)
         }).resume()

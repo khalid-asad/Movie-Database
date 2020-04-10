@@ -14,13 +14,30 @@ enum StringKey: String {
     case apiKey = "2a61185ef6a27f400fd92820ad9e8537"
 }
 
+enum SearchURLQueryParameters {
+    case query(_ query: String)
+    case page(_ page: Int)
+    
+    var path: String {
+        switch self {
+        case .query(let query):
+            return "&query=\((query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""))"
+        case .page(let page):
+            return "&page=\(String(page))"
+        }
+    }
+}
+
 enum StringKeyFormatter {
-    case searchURL(query: String)
+    case searchURL(query: String, page: Int = 1)
     
     var rawValue: String {
         switch self {
-        case .searchURL(let query):
-            return StringKey.baseURL.rawValue + "/search/movie?api_key=" + StringKey.apiKey.rawValue + "&query=" + (query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+        case .searchURL(let query, let page):
+            return StringKey.baseURL.rawValue +
+                "/search/movie?api_key=\(StringKey.apiKey.rawValue)" +
+                SearchURLQueryParameters.query(query).path +
+                SearchURLQueryParameters.page(page).path
         }
     }
 }

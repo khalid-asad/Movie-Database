@@ -16,6 +16,8 @@ class MovieTableViewCell: UITableViewCell {
     let movieNameLabel = UILabel()
     let movieDescriptionLabel = UILabel()
 
+    static let defaultImage = #imageLiteral(resourceName: "default")
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -23,7 +25,7 @@ class MovieTableViewCell: UITableViewCell {
         
         // Provide a placeholder image, and make sure content mode is aspect fit
         movieImageView.contentMode = .scaleAspectFit
-        movieImageView.image = UIImage(named: "default")
+        movieImageView.image = MovieTableViewCell.defaultImage
         
         // Add the views
         [movieImageView, movieNameLabel, movieDescriptionLabel].forEach() {

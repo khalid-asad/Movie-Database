@@ -25,7 +25,9 @@ public enum FetchInfoState<T, U> {
 extension MovieModel: NetworkRequestProtocol {
     
     // Fetch the query search term against the API through URLSession downloadTask
-    func fetchQuery(_ term: String, page: Int, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
+    func fetchQuery(_ term: String, page: Int? = nil, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
+        let page = page ?? ((items.count / 20) + 1)
+        
         guard let url = URL(string: StringKeyFormatter.searchURL(query: term, page: page).rawValue) else {
             return completion(.failure(nil))
         }

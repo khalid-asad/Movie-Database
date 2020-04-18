@@ -64,7 +64,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // When scrolling past the last cell, load the next page of data
         if indexPath.row == model.items.count - 1 , let searchQuery = searchQuery {
-            fetch(query: searchQuery, page: (model.items.count / 20) + 1)
+            fetch(query: searchQuery)
         }
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
@@ -249,7 +249,7 @@ extension MovieViewController {
         fetch(query: searchQuery, page: 1)
     }
     
-    private func fetch(query: String, page: Int) {
+    private func fetch(query: String, page: Int? = nil) {
         // Fetch the search results from the API through the model
         model.fetchQuery(query, page: page) { [weak self] result in
             guard let self = self else { return }

@@ -49,7 +49,7 @@ struct MovieSearchResult: Codable {
     var title: String
     var voteAverage: Double
     var overview: String
-    var releaseDate: String
+    var releaseDate: Date?
     
     enum CodingKeys: String, CodingKey {
         case popularity
@@ -67,9 +67,30 @@ struct MovieSearchResult: Codable {
         case overview
         case releaseDate = "release_date"
     }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        popularity = try container.decode(Double.self, forKey: .popularity)
+        voteCount = try container.decode(Int.self, forKey: .voteCount)
+        video = try container.decode(Bool.self, forKey: .video)
+        posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath)
+        id = try container.decode(Int.self, forKey: .id)
+        adult = try container.decode(Bool.self, forKey: .adult)
+        backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath)
+        originalLanguage = try container.decode(String.self, forKey: .originalLanguage)
+        originalTitle = try container.decode(String.self, forKey: .originalTitle)
+        genreIDs = try container.decode([Int].self, forKey: .genreIDs)
+        title = try container.decode(String.self, forKey: .title)
+        voteAverage = try container.decode(Double.self, forKey: .voteAverage)
+        overview = try container.decode(String.self, forKey: .overview)
+        
+        let releaseDateString = try container.decodeIfPresent(String.self, forKey: .releaseDate)
+        self.releaseDate = releaseDateString?.toDate
+    }
 }
 
-enum Genres: Int, CaseIterable {
+enum Genres: Int, CaseIterable, Codable {
     case all = 0
     case action = 28
     case comedy = 35

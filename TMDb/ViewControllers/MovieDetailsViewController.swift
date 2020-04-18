@@ -65,7 +65,7 @@ final class MovieDetailsViewController: UIViewController {
 extension MovieDetailsViewController {
     
     private func setUpViews() {
-        titleLabel.text = "\(model.title) (\(model.releaseDate))"
+        titleLabel.text = "\(model.title) (\(model.releaseDate?.toStringYear ?? ""))"
         imageView.image = image
         descriptionLabel.text = model.overview
                 

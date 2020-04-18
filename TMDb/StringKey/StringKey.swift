@@ -41,3 +41,14 @@ enum StringKeyFormatter {
         }
     }
 }
+
+enum LocalErrors: LocalizedError {
+    case decodingFailed
+    
+    var errorDescription: String? {
+        switch self {
+        case .decodingFailed:
+            return "Decoding JSON failed."
+        }
+    }
+}

@@ -115,7 +115,7 @@ class TMDbTests: XCTestCase {
 
         ex = expectation(description: "Waiting for fetch call to succeed.")
         // Then the fetch query call should fail
-        model.fetchQuery(searchURL, completion: { result in
+        model.fetchQuery(searchURL, page: 2, completion: { result in
             switch result {
             case .success:
                 XCTFail("This test case should fail due to an incorrect URL.")

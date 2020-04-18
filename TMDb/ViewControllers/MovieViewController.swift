@@ -51,7 +51,16 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         return model.items.count
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // When scrolling past the last cell, load the next page of data
+        if indexPath.row == model.items.count - 1 , let searchQuery = searchQuery {
+            fetch(query: searchQuery, page: (model.items.count / 20) + 1)
+        }
+        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
             let movie = model.items[safe: (indexPath as NSIndexPath).row]
         else {
@@ -102,7 +111,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
 // MARK: - Search Controller
 extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
-    // Protocol function for searching
+    /// Protocol function for searching
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         guard let searchBarText = searchBar.text else { return }
@@ -110,7 +119,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         search(for: searchBarText)
     }
     
-    // Protocol function for text changing, we want to clear the cache and then search
+    /// Protocol function for text changing, we want to clear the cache and then search
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchBarText = searchBar.text else { return }
         // Search with the text from the Search Bar
@@ -118,7 +127,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         search(for: searchBarText)
     }
     
-    // Protocol function for Scopes (so we can sort by Genres)
+    /// Protocol function for Scopes (so we can sort by Genres)
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         searchScope = Genres.allCases[selectedScope]
         search(for: searchBar.text ?? "")
@@ -144,7 +153,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
 // MARK: - Private Methods
 extension MovieViewController {
     
-    // Asynchronously reload the tableView data and end refreshing
+    /// Asynchronously reload the tableView data and end refreshing
     private func reloadData() {
         DispatchQueue.main.async { [weak self] in
             assert(Thread.isMainThread)
@@ -154,7 +163,7 @@ extension MovieViewController {
         }
     }
     
-    // Configure the navigation bar theme
+    /// Configure the navigation bar theme
     private func configureNavigationBar() {
         guard let navigationController = navigationController else { return }
         let navigationBar = navigationController.navigationBar
@@ -165,7 +174,7 @@ extension MovieViewController {
         title = "TMDb"
     }
     
-    // Configure the Table View
+    /// Configure the Table View
     private func configureTableView() {
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = view.frame.width
@@ -195,7 +204,7 @@ extension MovieViewController {
         model.items = []
     }
     
-    // Configures the Search Controller in the Navigation bar
+    /// Configures the Search Controller in the Navigation bar
     private func configureSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -208,7 +217,7 @@ extension MovieViewController {
         definesPresentationContext = true
     }
     
-    // Function to search by cancelling previous requests, and creating a new one
+    /// Function to search by cancelling previous requests, and creating a new one
     private func search(for text: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
         clearDataAndCache()
@@ -216,14 +225,14 @@ extension MovieViewController {
         perform(#selector(reloadTableView), with: nil, afterDelay: 0.15)
     }
     
-    // Clears the cache in the model, then reloads the data in the table view
+    /// Clears the cache in the model, then reloads the data in the table view
     private func clearDataAndCache() {
         model.items.removeAll()
         model.cache.removeAllObjects()
         reloadData()
     }
     
-    // Reload the table view by fetching the search query
+    /// Reload the table view by fetching the search query
     @objc
     private func reloadTableView() {
         // If search query is non-existent then wipe the data and cache and return

@@ -74,11 +74,19 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
             let url = URL(string: StringKey.imageBaseURL.rawValue + backdropPath)
         else { return cell }
         
+        // Add an activity indicator on the Image
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.frame = cell.movieImageView.bounds
+        cell.movieImageView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
         // Download the image, and set it if it's available
         model.fetchImage(url: url, completion: { [weak self] cellImage in
             guard let self = self else { return }
             DispatchQueue.main.async(execute: { [weak self] () -> Void in
                 // Indirectly access the cell in an Async method to prevent memory leaks
+                activityIndicator.stopAnimating()
+                activityIndicator.removeFromSuperview()
                 if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
                     guard let cellImage = cellImage else { return }
                     updateCell.movieImageView.image = cellImage

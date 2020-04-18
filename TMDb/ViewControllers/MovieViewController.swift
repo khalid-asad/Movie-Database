@@ -53,6 +53,12 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        guard let viewModel = model.items[safe: (indexPath as NSIndexPath).row] else { return }
+        let image = model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) as? UIImage ?? MovieViewController.placeHolderImage
+        
+        let vc = MovieDetailsViewController(model: viewModel, image: image)
+        vc.modalPresentationStyle = .fullScreen
+        navigationController?.present(vc, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

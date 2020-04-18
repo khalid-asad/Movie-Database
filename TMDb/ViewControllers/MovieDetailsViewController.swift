@@ -37,13 +37,6 @@ final class MovieDetailsViewController: UIViewController {
         return view
     }()
     
-    var imageView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentMode = .scaleAspectFit
-        return view
-    }()
-    
     var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -52,6 +45,13 @@ final class MovieDetailsViewController: UIViewController {
         return label
     }()
     
+    var imageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+        
     var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -65,21 +65,28 @@ final class MovieDetailsViewController: UIViewController {
 extension MovieDetailsViewController {
     
     private func setUpViews() {
+        titleLabel.text = "\(model.title) (\(model.releaseDate))"
         imageView.image = image
-        titleLabel.text = model.title
         descriptionLabel.text = model.overview
+                
+        NSLayoutConstraint.activate([
+            imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 288)
+        ])
         
-        stackView.addArrangedSubview(imageView)
+        let ratingView = RatingView().generateRatingView(voteAverage: model.voteAverage)
+        
         stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(ratingView)
+        stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(descriptionLabel)
                 
         view.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8)
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -20),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
 }

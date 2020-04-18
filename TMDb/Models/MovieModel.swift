@@ -30,17 +30,22 @@ extension MovieModel: NetworkRequestProtocol {
             return completion(.failure(nil))
         }
         
-        DispatchQueue.network.async { [weak self] in
-            URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-                guard let self = self, let data = data else {
+        DispatchQueue.network.async {
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data else {
                     DispatchQueue.main.async { completion(.failure(nil)) }
                     return
                 }
                 
                 do {
                     let responseData = try JSONDecoder().decode(MovieSearchQuery.self, from: data)
-                    self.items = page == 1 ? responseData.results : self.items + responseData.results
-                    DispatchQueue.main.async { completion(.success(responseData)) }
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else {
+                            return completion(.failure(nil))
+                        }
+                        self.items = page == 1 ? responseData.results : self.items + responseData.results
+                        completion(.success(responseData))
+                    }
                 } catch let err {
                     print("Err", err)
                     DispatchQueue.main.async { completion(.failure(err)) }

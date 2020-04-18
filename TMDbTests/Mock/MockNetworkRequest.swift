@@ -24,7 +24,7 @@ class MockNetworkRequest: NetworkRequestProtocol {
         self.error = error
     }
     
-    func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
+    func fetchQuery(_ term: String, page: Int, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
         guard let error = error else {
             if let path = Bundle(for: type(of: self)).path(forResource: "queryResponse", ofType: "json") {
                 do {

@@ -223,9 +223,12 @@ extension MovieViewController {
             clearDataAndCache()
             return
         }
-
+        fetch(query: searchQuery, page: 1)
+    }
+    
+    private func fetch(query: String, page: Int) {
         // Fetch the search results from the API through the model
-        model.fetchQuery(searchQuery, completion: { [weak self] result in
+        model.fetchQuery(query, page: page) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:
@@ -238,6 +241,6 @@ extension MovieViewController {
             case .failure(let error):
                 print("Error: \(String(describing: error))")
             }
-        })
+        }
     }
 }

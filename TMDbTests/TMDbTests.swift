@@ -76,7 +76,7 @@ class TMDbTests: XCTestCase {
         var ex = expectation(description: "Waiting for fetch call to fail.")
         
         // Then the fetch query call should not fail, instead return 0 results
-        MockNetworkRequest(error: .unauthorized).fetchQuery(searchURL, completion: { result in
+        MockNetworkRequest(error: .unauthorized).fetchQuery(searchURL, page: 1, completion: { result in
             switch result {
             case .success:
                 XCTFail("This test case should fail because there is an incorrect API key.")
@@ -94,7 +94,7 @@ class TMDbTests: XCTestCase {
         ex = expectation(description: "Waiting for fetch call to succeed.")
         
         // Then the fetch query call should pass
-        MockNetworkRequest().fetchQuery(searchURL, completion: { result in
+        MockNetworkRequest().fetchQuery(searchURL, page: 1, completion: { result in
             switch result {
             case .success(let data):
                 XCTAssertEqual(data?.results.count, 20)

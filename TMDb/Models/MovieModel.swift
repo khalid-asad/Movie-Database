@@ -25,34 +25,40 @@ public enum FetchInfoState<T, U> {
 extension MovieModel: NetworkRequestProtocol {
     
     // Fetch the query search term against the API through URLSession downloadTask
-    func fetchQuery(_ term: String, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
-        guard let url = URL(string: StringKeyFormatter.searchURL(query: term).rawValue) else {
+    func fetchQuery(_ term: String, page: Int, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
+        guard let url = URL(string: StringKeyFormatter.searchURL(query: term, page: page).rawValue) else {
             return completion(.failure(nil))
         }
         
-        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let self = self, let data = data else {
-                return completion(.failure(nil))
-            }
-            
-            do {
-                let responseData = try JSONDecoder().decode(MovieSearchQuery.self, from: data)
-                self.items = responseData.results
-                completion(.success(responseData))
-            } catch let err {
-                print("Err", err)
-                completion(.failure(err))
-            }
-        }.resume()
+        DispatchQueue.network.async { [weak self] in
+            URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
+                guard let self = self, let data = data else {
+                    DispatchQueue.main.async { completion(.failure(nil)) }
+                    return
+                }
+                
+                do {
+                    let responseData = try JSONDecoder().decode(MovieSearchQuery.self, from: data)
+                    self.items = page == 1 ? responseData.results : self.items + responseData.results
+                    DispatchQueue.main.async { completion(.success(responseData)) }
+                } catch let err {
+                    print("Err", err)
+                    DispatchQueue.main.async { completion(.failure(err)) }
+                }
+            }.resume()
+        }
     }
     
     // Download the image
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
-        URLSession.shared.downloadTask(with: url, completionHandler: { (location, response, error) -> Void in
-            guard let data = try? Data(contentsOf: url), let cellImage = UIImage(data: data) else {
-                return completion(nil)
-            }
-            completion(cellImage)
-        }).resume()
+        DispatchQueue.network.async {
+            URLSession.shared.downloadTask(with: url, completionHandler: { (location, response, error) -> Void in
+                guard let data = try? Data(contentsOf: url), let cellImage = UIImage(data: data) else {
+                    DispatchQueue.main.async { completion(nil) }
+                    return
+                }
+                DispatchQueue.main.async { completion(cellImage)}
+            }).resume()
+        }
     }
 }

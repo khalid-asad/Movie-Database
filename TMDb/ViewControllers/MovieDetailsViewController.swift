@@ -13,6 +13,8 @@ final class MovieDetailsViewController: UIViewController {
     var model: MovieSearchResult!
     var image: UIImage!
     
+    var creditsModel: CreditsResponse?
+    
     let activityIndicator = UIActivityIndicatorView(style: .medium)
     
     init(model: MovieSearchResult, image: UIImage) {
@@ -34,9 +36,19 @@ final class MovieDetailsViewController: UIViewController {
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
         
-        setUpViews()
-        
-        activityIndicator.stopAnimating()
+        fetchCredits(for: model.id) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let response):
+                self.creditsModel = response
+            case .failure(let error):
+                print(error?.localizedDescription ?? "Unknown error")
+            }
+            
+            self.setUpViews()
+            self.activityIndicator.stopAnimating()
+        }
     }
     
     var stackView: UIStackView = {
@@ -98,5 +110,32 @@ extension MovieDetailsViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+    }
+}
+
+extension MovieDetailsViewController {
+    
+    /// Fetch the credits against the API through URLSession downloadTask.
+    private func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error?>) -> Void) {
+        guard let url = URL(string: StringKeyFormatter.creditsURL(id: id).rawValue) else {
+            return completion(.failure(nil))
+        }
+        
+        DispatchQueue.network.async {
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data else {
+                    DispatchQueue.main.async { completion(.failure(nil)) }
+                    return
+                }
+                
+                do {
+                    let responseData = try JSONDecoder().decode(CreditsResponse.self, from: data)
+                    DispatchQueue.main.async { completion(.success(responseData)) }
+                } catch let err {
+                    print("Err", err)
+                    DispatchQueue.main.async { completion(.failure(err)) }
+                }
+            }.resume()
+        }
     }
 }

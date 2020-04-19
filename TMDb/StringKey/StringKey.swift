@@ -30,6 +30,7 @@ enum SearchURLQueryParameters {
 
 enum StringKeyFormatter {
     case searchURL(query: String, page: Int = 1)
+    case creditsURL(id: Int)
     
     var rawValue: String {
         switch self {
@@ -38,6 +39,9 @@ enum StringKeyFormatter {
                 "/search/movie?api_key=\(StringKey.apiKey.rawValue)" +
                 SearchURLQueryParameters.query(query).path +
                 SearchURLQueryParameters.page(page).path
+        case .creditsURL(let id):
+            return StringKey.baseURL.rawValue +
+                "/movie/\(id)/credits?api_key=\(StringKey.apiKey.rawValue)"
         }
     }
 }

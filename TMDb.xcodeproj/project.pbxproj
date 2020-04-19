@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		191ACC25244BD93600F92705 /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191ACC24244BD93600F92705 /* Credits.swift */; };
 		1930F49E237A49C80053F37C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F49D237A49C80053F37C /* AppDelegate.swift */; };
 		1930F4A0237A49C80053F37C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F49F237A49C80053F37C /* SceneDelegate.swift */; };
 		1930F4A2237A49C80053F37C /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F4A1237A49C80053F37C /* MovieViewController.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		191ACC24244BD93600F92705 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
 		1930F49A237A49C70053F37C /* TMDb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1930F49D237A49C80053F37C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1930F49F237A49C80053F37C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			children = (
 				19BD1117237A4BC9000268CD /* MovieModel.swift */,
 				19BD111F237A4D82000268CD /* MovieInfo.swift */,
+				191ACC24244BD93600F92705 /* Credits.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				19BD1118237A4BC9000268CD /* MovieModel.swift in Sources */,
 				1930F4A2237A49C80053F37C /* MovieViewController.swift in Sources */,
 				1930F49E237A49C80053F37C /* AppDelegate.swift in Sources */,
+				191ACC25244BD93600F92705 /* Credits.swift in Sources */,
 				19C83AA4244BC60A0001CF39 /* Date+Extensions.swift in Sources */,
 				19C83A9C244AC2690001CF39 /* MovieDetailsViewController.swift in Sources */,
 				19C83AA2244BC3F40001CF39 /* String+Extensions.swift in Sources */,

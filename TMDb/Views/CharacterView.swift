@@ -61,6 +61,10 @@ final class CharacterView: UIView {
             }
         }
         
+        NSLayoutConstraint.activate([
+            characterImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 144)
+        ])
+        
         characterStackView.addArrangedSubview(characterImageView)
         characterStackView.addArrangedSubview(actorNameLabel)
         characterStackView.addArrangedSubview(characterNameLabel)

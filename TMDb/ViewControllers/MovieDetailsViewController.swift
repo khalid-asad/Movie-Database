@@ -98,14 +98,14 @@ final class MovieDetailsViewController: UIViewController {
 }
 
 // MARK: - Private Methods
-extension MovieDetailsViewController: UIScrollViewDelegate {
+extension MovieDetailsViewController {
     
     private func setUpViews() {
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
@@ -113,8 +113,8 @@ extension MovieDetailsViewController: UIScrollViewDelegate {
         scrollView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
             stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
@@ -143,12 +143,12 @@ extension MovieDetailsViewController: UIScrollViewDelegate {
         }
 
         let characterScrollView = UIScrollView()
-        characterScrollView.delegate = self
+        characterScrollView.translatesAutoresizingMaskIntoConstraints = false
         characterScrollView.addSubview(charactersStackView)
 
         NSLayoutConstraint.activate([
-            characterScrollView.topAnchor.constraint(equalTo: charactersStackView.safeAreaLayoutGuide.topAnchor),
-            characterScrollView.bottomAnchor.constraint(lessThanOrEqualTo: charactersStackView.bottomAnchor),
+            characterScrollView.topAnchor.constraint(equalTo: charactersStackView.topAnchor),
+            characterScrollView.bottomAnchor.constraint(equalTo: charactersStackView.bottomAnchor),
             characterScrollView.leadingAnchor.constraint(equalTo: charactersStackView.leadingAnchor),
             characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor)
         ])

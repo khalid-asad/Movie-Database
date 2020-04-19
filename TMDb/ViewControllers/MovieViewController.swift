@@ -58,7 +58,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         
         let vc = MovieDetailsViewController(model: viewModel, image: image)
         vc.modalPresentationStyle = .fullScreen
-        navigationController?.present(vc, animated: true, completion: nil)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -176,6 +176,9 @@ extension MovieViewController {
         
         navigationBar.prefersLargeTitles = true
         navigationBar.backgroundColor = ThemeManager().navigationBarColor
+        navigationBar.tintColor = ThemeManager().darkColor
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         title = "TMDb"
     }

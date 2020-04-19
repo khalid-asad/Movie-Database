@@ -13,6 +13,8 @@ final class MovieDetailsViewController: UIViewController {
     var model: MovieSearchResult!
     var image: UIImage!
     
+    let activityIndicator = UIActivityIndicatorView(style: .medium)
+    
     init(model: MovieSearchResult, image: UIImage) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
@@ -22,10 +24,19 @@ final class MovieDetailsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.prefersLargeTitles = false
+                
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.center = view.center
+        activityIndicator.startAnimating()
+        
         setUpViews()
+        
+        activityIndicator.stopAnimating()
     }
     
     var stackView: UIStackView = {
@@ -75,10 +86,9 @@ extension MovieDetailsViewController {
         
         let ratingView = RatingView().generateRatingView(voteAverage: model.voteAverage)
         
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(ratingView)
-        stackView.addArrangedSubview(imageView)
-        stackView.addArrangedSubview(descriptionLabel)
+        [titleLabel, ratingView, imageView, descriptionLabel].forEach {
+            stackView.addArrangedSubview($0)
+        }
                 
         view.addSubview(stackView)
 

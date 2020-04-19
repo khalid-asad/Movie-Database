@@ -44,6 +44,11 @@ final class RatingView: UIView {
         let rating = voteAverage / 2.0
         let stars = Int(rating.round(nearest: 0.5) / 0.5)
         
+        guard rating != 0 else {
+            ratingLabel.text = "Unrated!"
+            return ratingLabel
+        }
+        
         for _ in 1...(stars/2) {
             addStar()
         }
@@ -58,10 +63,10 @@ final class RatingView: UIView {
             ratingLabel.heightAnchor.constraint(equalToConstant: size),
             ratingLabel.widthAnchor.constraint(equalToConstant: 40)
         ])
-                
+        
         ratingStackView.addArrangedSubview(starsStackView)
         ratingStackView.addArrangedSubview(ratingLabel)
-                        
+        
         return ratingStackView
     }
 }

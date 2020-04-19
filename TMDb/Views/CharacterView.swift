@@ -66,8 +66,19 @@ final class CharacterView: UIView {
         characterImageView.image = CharacterView.placeholderImage
         
         if let path = path , let url = URL(string: StringKey.imageBaseURL.rawValue + path) {
+            let activityIndicator = UIActivityIndicatorView(style: .medium)
+            activityIndicator.center = characterImageView.center
+            characterImageView.addSubview(activityIndicator)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            activityIndicator.hidesWhenStopped = true
+            
+            DispatchQueue.main.async { activityIndicator.startAnimating() }
+            
             fetchImage(url: url) { [weak self] image in
-                self?.characterImageView.image = image ?? CharacterView.placeholderImage
+                DispatchQueue.main.async { [weak self] in
+                    activityIndicator.stopAnimating()
+                    self?.characterImageView.image = image ?? CharacterView.placeholderImage
+                }
             }
         }
         

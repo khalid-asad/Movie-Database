@@ -31,7 +31,8 @@ final class MovieDetailsViewController: UIViewController {
         super.viewDidLoad()
         
         navigationController?.navigationBar.prefersLargeTitles = false
-                
+        
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
         activityIndicator.center = view.center
         activityIndicator.startAnimating()

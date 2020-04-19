@@ -104,16 +104,25 @@ extension MovieDetailsViewController: UIScrollViewDelegate {
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+                
+        scrollView.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
         titleLabel.text = "\(model.title) (\(model.releaseDate?.toStringYear ?? ""))"
         imageView.image = image
         descriptionLabel.text = model.overview
-                
+        
         NSLayoutConstraint.activate([
             imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 288)
         ])
@@ -123,38 +132,28 @@ extension MovieDetailsViewController: UIScrollViewDelegate {
         [titleLabel, ratingView, imageView, descriptionLabel].forEach {
             stackView.addArrangedSubview($0)
         }
-                
-//        creditsModel?.cast?.forEach() {
-//            let characterView = CharacterView().generateCharacterView(
-//                actorName: $0.name,
-//                characterName: $0.character,
-//                path: $0.profilePath
-//            )
-//            charactersStackView.addArrangedSubview(characterView)
-//        }
-//
-//        let characterScrollView = UIScrollView()
-//        characterScrollView.delegate = self
-//        characterScrollView.addSubview(charactersStackView)
-//
-//        NSLayoutConstraint.activate([
-//            characterScrollView.topAnchor.constraint(equalTo: charactersStackView.safeAreaLayoutGuide.topAnchor),
-//            characterScrollView.bottomAnchor.constraint(lessThanOrEqualTo: charactersStackView.bottomAnchor),
-//            characterScrollView.leadingAnchor.constraint(equalTo: charactersStackView.leadingAnchor),
-//            characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor)
-//        ])
-//
-//        stackView.addArrangedSubview(charactersStackView)
-        
-        scrollView.addSubview(stackView)
-        
+                        
+        creditsModel?.cast?.forEach() {
+            let characterView = CharacterView().generateCharacterView(
+                actorName: $0.name,
+                characterName: $0.character,
+                path: $0.profilePath
+            )
+            charactersStackView.addArrangedSubview(characterView)
+        }
+
+        let characterScrollView = UIScrollView()
+        characterScrollView.delegate = self
+        characterScrollView.addSubview(charactersStackView)
+
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            characterScrollView.topAnchor.constraint(equalTo: charactersStackView.safeAreaLayoutGuide.topAnchor),
+            characterScrollView.bottomAnchor.constraint(lessThanOrEqualTo: charactersStackView.bottomAnchor),
+            characterScrollView.leadingAnchor.constraint(equalTo: charactersStackView.leadingAnchor),
+            characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor)
         ])
+
+        stackView.addArrangedSubview(charactersStackView)
     }
 }
 

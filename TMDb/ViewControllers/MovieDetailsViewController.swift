@@ -92,6 +92,7 @@ final class MovieDetailsViewController: UIViewController {
     
     var charactersStackView: UIStackView = {
         let view = UIStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .horizontal
         return view
     }()
@@ -133,6 +134,11 @@ extension MovieDetailsViewController {
             stackView.addArrangedSubview($0)
         }
                         
+        let characterScrollView = UIScrollView()
+        characterScrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        stackView.addArrangedSubview(characterScrollView)
+        
         creditsModel?.cast?.forEach() {
             let characterView = CharacterView().generateCharacterView(
                 actorName: $0.name,
@@ -141,19 +147,16 @@ extension MovieDetailsViewController {
             )
             charactersStackView.addArrangedSubview(characterView)
         }
-
-        let characterScrollView = UIScrollView()
-        characterScrollView.translatesAutoresizingMaskIntoConstraints = false
+        
         characterScrollView.addSubview(charactersStackView)
-
+        
         NSLayoutConstraint.activate([
             characterScrollView.topAnchor.constraint(equalTo: charactersStackView.topAnchor),
-            characterScrollView.bottomAnchor.constraint(equalTo: charactersStackView.bottomAnchor),
             characterScrollView.leadingAnchor.constraint(equalTo: charactersStackView.leadingAnchor),
-            characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor)
+            characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor),
+            characterScrollView.heightAnchor.constraint(equalTo: charactersStackView.heightAnchor),
+            characterScrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
-
-        stackView.addArrangedSubview(charactersStackView)
     }
 }
 

@@ -12,6 +12,15 @@ final class CharacterView: UIView {
     
     private static let placeholderImage = #imageLiteral(resourceName: "default")
     private let size: CGFloat = 24
+    private let characterViewWidth: CGFloat = (UIScreen.main.bounds.width / 3) - 2
+    
+    var characterView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.borderColor = ThemeManager().darkColor.cgColor
+        view.layer.borderWidth = 1
+        return view
+    }()
     
     var characterStackView: UIStackView = {
         let view = UIStackView()
@@ -19,7 +28,6 @@ final class CharacterView: UIView {
         view.axis = .vertical
         view.spacing = 8
         view.alignment = .center
-        view.distribution = .equalCentering
         return view
     }()
     
@@ -35,6 +43,7 @@ final class CharacterView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .center
         return label
     }()
     
@@ -43,6 +52,7 @@ final class CharacterView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .center
         return label
     }()
     
@@ -62,14 +72,27 @@ final class CharacterView: UIView {
         }
         
         NSLayoutConstraint.activate([
-            characterImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 144)
+            characterImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 192)
         ])
         
         characterStackView.addArrangedSubview(characterImageView)
         characterStackView.addArrangedSubview(actorNameLabel)
         characterStackView.addArrangedSubview(characterNameLabel)
+        
+        NSLayoutConstraint.activate([
+            characterStackView.widthAnchor.constraint(lessThanOrEqualToConstant: characterViewWidth)
+        ])
+        
+        characterView.addSubview(characterStackView)
+        
+        NSLayoutConstraint.activate([
+            characterView.topAnchor.constraint(equalTo: characterStackView.topAnchor),
+            characterView.bottomAnchor.constraint(equalTo: characterStackView.bottomAnchor),
+            characterView.leadingAnchor.constraint(equalTo: characterStackView.leadingAnchor),
+            characterView.trailingAnchor.constraint(equalTo: characterStackView.trailingAnchor)
+        ])
                 
-        return characterStackView
+        return characterView
     }
 }
 

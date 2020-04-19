@@ -94,6 +94,7 @@ final class MovieDetailsViewController: UIViewController {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .horizontal
+        view.spacing = 2
         return view
     }()
 }

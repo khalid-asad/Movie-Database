@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		191ACC25244BD93600F92705 /* Credits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191ACC24244BD93600F92705 /* Credits.swift */; };
+		191ACC27244C04C300F92705 /* CharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191ACC26244C04C300F92705 /* CharacterView.swift */; };
 		1930F49E237A49C80053F37C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F49D237A49C80053F37C /* AppDelegate.swift */; };
 		1930F4A0237A49C80053F37C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F49F237A49C80053F37C /* SceneDelegate.swift */; };
 		1930F4A2237A49C80053F37C /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930F4A1237A49C80053F37C /* MovieViewController.swift */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		191ACC24244BD93600F92705 /* Credits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credits.swift; sourceTree = "<group>"; };
+		191ACC26244C04C300F92705 /* CharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterView.swift; sourceTree = "<group>"; };
 		1930F49A237A49C70053F37C /* TMDb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1930F49D237A49C80053F37C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1930F49F237A49C80053F37C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		19BD1119237A4CA0000268CD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				191ACC26244C04C300F92705 /* CharacterView.swift */,
 				19BD111A237A4CB0000268CD /* MovieTableViewCell.swift */,
 				19C83A9F244BBCD90001CF39 /* RatingView.swift */,
 			);
@@ -323,6 +326,7 @@
 				19BD111B237A4CB0000268CD /* MovieTableViewCell.swift in Sources */,
 				19E9649D237CFA51000E636E /* NetworkRequestProtocol.swift in Sources */,
 				19FE7307237BC400002B68D0 /* StringKey.swift in Sources */,
+				191ACC27244C04C300F92705 /* CharacterView.swift in Sources */,
 				19BD1118237A4BC9000268CD /* MovieModel.swift in Sources */,
 				1930F4A2237A49C80053F37C /* MovieViewController.swift in Sources */,
 				1930F49E237A49C80053F37C /* AppDelegate.swift in Sources */,

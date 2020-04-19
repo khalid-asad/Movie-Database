@@ -51,11 +51,18 @@ final class MovieDetailsViewController: UIViewController {
         }
     }
     
+    var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     var stackView: UIStackView = {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .vertical
         view.alignment = .center
+        view.distribution = .fill
         view.spacing = 16
         return view
     }()
@@ -82,12 +89,27 @@ final class MovieDetailsViewController: UIViewController {
         label.lineBreakMode = .byWordWrapping
         return label
     }()
+    
+    var charactersStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        return view
+    }()
 }
 
 // MARK: - Private Methods
-extension MovieDetailsViewController {
+extension MovieDetailsViewController: UIScrollViewDelegate {
     
     private func setUpViews() {
+        view.addSubview(scrollView)
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
         titleLabel.text = "\(model.title) (\(model.releaseDate?.toStringYear ?? ""))"
         imageView.image = image
         descriptionLabel.text = model.overview
@@ -102,13 +124,36 @@ extension MovieDetailsViewController {
             stackView.addArrangedSubview($0)
         }
                 
-        view.addSubview(stackView)
-
+//        creditsModel?.cast?.forEach() {
+//            let characterView = CharacterView().generateCharacterView(
+//                actorName: $0.name,
+//                characterName: $0.character,
+//                path: $0.profilePath
+//            )
+//            charactersStackView.addArrangedSubview(characterView)
+//        }
+//
+//        let characterScrollView = UIScrollView()
+//        characterScrollView.delegate = self
+//        characterScrollView.addSubview(charactersStackView)
+//
+//        NSLayoutConstraint.activate([
+//            characterScrollView.topAnchor.constraint(equalTo: charactersStackView.safeAreaLayoutGuide.topAnchor),
+//            characterScrollView.bottomAnchor.constraint(lessThanOrEqualTo: charactersStackView.bottomAnchor),
+//            characterScrollView.leadingAnchor.constraint(equalTo: charactersStackView.leadingAnchor),
+//            characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor)
+//        ])
+//
+//        stackView.addArrangedSubview(charactersStackView)
+        
+        scrollView.addSubview(stackView)
+        
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -20),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            stackView.topAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
 }

@@ -25,7 +25,7 @@ public enum FetchInfoState<T, U> {
 extension MovieModel {
     
     /// Fetch the query search term against the API through URLSession downloadTask
-    func fetchQuery(_ term: String, page: Int? = nil, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error?>) -> Void) {
+    func fetchQuery(_ term: String, page: Int? = nil, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error>) -> Void) {
         let page = page ?? ((items.count / 20) + 1)
         NetworkManager.shared.fetchQuery(term, page: page) { [weak self] result in
             guard let self = self else { return completion(.failure(NetworkError.noReference)) }

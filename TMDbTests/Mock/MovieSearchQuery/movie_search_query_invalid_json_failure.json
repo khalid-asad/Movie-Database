@@ -1,0 +1,372 @@
+{
+    "page": 1,
+    "total_results": 26,
+    "total_pages": 2,
+    "results": [
+        {
+            "vote_count": 15029,
+            "video": false,
+            "poster_path": "/dCtFvscYcXQKTNvyyaQr2g2UacJ.jpg",
+            "id": 671,
+            "adult": false,
+            "backdrop_path": "/hziiv14OpD73u9gAak4XDDfBKa2.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Philosopher's Stone",
+            "genre_ids": [
+                12,
+                14,
+                10751
+            ],
+            "title": "Harry Potter and the Philosopher's Stone",
+            "vote_average": 7.8,
+            "overview": "Harry Potter has lived under the stairs at his aunt and uncle's house his whole life. But on his 11th birthday, he learns he's a powerful wizard -- with a place waiting for him at the Hogwarts School of Witchcraft and Wizardry. As he learns to harness his newfound powers with the help of the school's kindly headmaster, Harry uncovers the truth about his parents' deaths -- and about the villain who's to blame.",
+            "release_date": "2001-11-16"
+        },
+        {
+            "popularity": 40.24,
+            "video": false,
+            "poster_path": "/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg",
+            "id": 672,
+            "adult": false,
+            "backdrop_path": "/avqzwKn89VetTEvAlBePt3Us6Al.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Chamber of Secrets",
+            "genre_ids": [
+                12,
+                14,
+                10751
+            ],
+            "title": "Harry Potter and the Chamber of Secrets",
+            "vote_average": 7.7,
+            "overview": "Cars fly, trees fight back, and a mysterious house-elf comes to warn Harry Potter at the start of his second year at Hogwarts. Adventure and danger await when bloody writing on a wall announces: The Chamber Of Secrets Has Been Opened. To save Hogwarts will require all of Harry, Ron and Hermione’s magical abilities and courage.",
+            "release_date": "2002-11-13"
+        },
+        {
+            "popularity": 24.32,
+            "vote_count": 11948,
+            "poster_path": "/6sASqcdrEHXxUhA3nFpjrRecPD2.jpg",
+            "id": 674,
+            "adult": false,
+            "backdrop_path": "/gzKW3emulMxIHzuXxZoyDB1lei9.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Goblet of Fire",
+            "genre_ids": [
+                12,
+                14,
+                10751
+            ],
+            "title": "Harry Potter and the Goblet of Fire",
+            "vote_average": 7.8,
+            "overview": "Harry starts his fourth year at Hogwarts, competes in the treacherous Triwizard Tournament and faces the evil Lord Voldemort. Ron and Hermione help Harry manage the pressure – but Voldemort lurks, awaiting his chance to destroy Harry and all that he stands for.",
+            "release_date": "2005-11-16"
+        },
+        {
+            "popularity": 27.206,
+            "vote_count": 11333,
+            "video": false,
+            "poster_path": "/bFXys2nhALwDvpkF3dP3Vvdfn8b.jpg",
+            "id": 767,
+            "adult": false,
+            "backdrop_path": "/kRyojLYtWPsBKfDhphhhl1FdM5a.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Half-Blood Prince",
+            "genre_ids": [
+                12,
+                14,
+                10751
+            ],
+            "title": "Harry Potter and the Half-Blood Prince",
+            "vote_average": 7.6,
+            "overview": "As Harry begins his sixth year at Hogwarts, he discovers an old book marked as 'Property of the Half-Blood Prince', and begins to learn more about Lord Voldemort's dark past.",
+            "release_date": "2009-07-07"
+        },
+        {
+            "popularity": 28.558,
+            "vote_count": 12465,
+            "video": false,
+            "poster_path": "/jUFjMoLh8T2CWzHUSjKCojI5SHu.jpg",
+            "id": 673,
+            "adult": false,
+            "backdrop_path": "/vbk5CfaAHOjQPSAcYm6AoRRz2Af.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Prisoner of Azkaban",
+            "genre_ids": [
+                12,
+                14,
+                10751
+            ],
+            "title": "Harry Potter and the Prisoner of Azkaban",
+            "vote_average": 7.9,
+            "overview": "Harry, Ron and Hermione return to Hogwarts for another magic-filled year. Harry comes face to face with danger yet again, this time in the form of escaped convict, Sirius Black—and turns to sympathetic Professor Lupin for help.",
+            "release_date": "2004-05-31"
+        },
+        {
+            "popularity": 29.395,
+            "vote_count": 11579,
+            "video": false,
+            "poster_path": "/maP4MTfPCeVD2FZbKTLUgriOW4R.jpg",
+            "id": 12444,
+            "adult": false,
+            "backdrop_path": "/8YA36faYlkpfp6aozcGsqq68pZ9.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Deathly Hallows: Part 1",
+            "genre_ids": [
+                12,
+                14,
+                10751
+            ],
+            "title": "Harry Potter and the Deathly Hallows: Part 1",
+            "vote_average": 7.8,
+            "overview": "Harry, Ron and Hermione walk away from their last year at Hogwarts to find and destroy the remaining Horcruxes, putting an end to Voldemort's bid for immortality. But with Harry's beloved Dumbledore dead and Voldemort's unscrupulous Death Eaters on the loose, the world is more dangerous than ever.",
+            "release_date": "2010-10-17"
+        },
+        {
+            "popularity": 30.054,
+            "vote_count": 12390,
+            "video": false,
+            "poster_path": "/fTplI1NCSuEDP4ITLcTps739fcC.jpg",
+            "id": 12445,
+            "adult": false,
+            "backdrop_path": "/n5A7brJCjejceZmHyujwUTVgQNC.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Deathly Hallows: Part 2",
+            "genre_ids": [
+                12,
+                14,
+                10751
+            ],
+            "title": "Harry Potter and the Deathly Hallows: Part 2",
+            "vote_average": 8.1,
+            "overview": "Harry, Ron and Hermione continue their quest to vanquish the evil Voldemort once and for all. Just as things begin to look hopeless for the young wizards, Harry discovers a trio of magical objects that endow him with powers to rival Voldemort's formidable skills.",
+            "release_date": "2011-07-07"
+        },
+        {
+            "popularity": 27.954,
+            "vote_count": 11620,
+            "video": false,
+            "poster_path": "/4YnLxYLHhT4UQ8i9jxAXWy46Xuw.jpg",
+            "id": 675,
+            "adult": false,
+            "backdrop_path": "/gGt4ePOhD8ilxd3FYhKB06L2CyG.jpg",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Order of the Phoenix",
+            "genre_ids": [
+                12,
+                14,
+                9648,
+                10751
+            ],
+            "title": "Harry Potter and the Order of the Phoenix",
+            "vote_average": 7.6,
+            "overview": "Returning for his fifth year of study at Hogwarts, Harry is stunned to find that his warnings about the return of Lord Voldemort have been ignored. Left with no choice, Harry takes matters into his own hands, training a small group of students – dubbed 'Dumbledore's Army' – to defend themselves against the dark arts.",
+            "release_date": "2007-06-28"
+        },
+        {
+            "popularity": 3.178,
+            "id": 482408,
+            "video": false,
+            "vote_count": 15,
+            "vote_average": 6.5,
+            "title": "Harry Potter - A History Of Magic",
+            "release_date": "2017-10-28",
+            "original_language": "en",
+            "original_title": "Harry Potter - A History Of Magic",
+            "genre_ids": [
+                99
+            ],
+            "backdrop_path": "/mjCYpJXCBYDZgMr1U1KZcFgFDfC.jpg",
+            "adult": false,
+            "overview": "A thrilling journey through legends, belief and folklore, this film goes behind the scenes with the British Library as they search to tell that story through objects in their collection, in an ambitious new exhibition: Harry Potter: A History Of Magic.  J.K. Rowling, who is lending unseen manuscripts, drawings and drafts from her private archives (which will sit alongside treasures from the British Library, as well as original drafts and drawings from Jim Kay) talks about some of the personal items she has lent to the exhibition and gives new insight into her writing, looking at some of the objects from the exhibition that have fired her imagination.",
+            "poster_path": "/dinCvbPkHJ6x1LcIHraG6XDE1bY.jpg"
+        },
+        {
+            "popularity": 1.907,
+            "id": 483898,
+            "video": false,
+            "vote_count": 5,
+            "vote_average": 8,
+            "title": "50 Greatest Harry Potter Moments",
+            "release_date": "2011-07-27",
+            "original_language": "en",
+            "original_title": "50 Greatest Harry Potter Moments",
+            "genre_ids": [
+                99
+            ],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "To mark the release two weeks ago of the eighth and final movie in the series, Robbie Coltrane narrates a countdown of the movie franchise's best moments. From Harry's first meeting with Ron and Hermione aboard the Hogwarts Express through to magical mysteries.",
+            "poster_path": "/ycPuj1fbbzdVzKPNUh8uBL9j4tZ.jpg"
+        },
+        {
+            "popularity": 1.25,
+            "id": 341415,
+            "video": false,
+            "vote_count": 2,
+            "vote_average": 10,
+            "title": "'Harry Potter': Behind the Magic",
+            "release_date": "2005-11-19",
+            "original_language": "en",
+            "original_title": "'Harry Potter': Behind the Magic",
+            "genre_ids": [],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "DVD that came with special box set. Covers the making of Harry Potter and the Goblet of Fire (2005).",
+            "poster_path": null
+        },
+        {
+            "popularity": 0.727,
+            "id": 549566,
+            "video": false,
+            "vote_count": 1,
+            "vote_average": 10,
+            "title": "The Harry Potter Saga Analyzed",
+            "release_date": "",
+            "original_language": "en",
+            "original_title": "The Harry Potter Saga Analyzed",
+            "genre_ids": [],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "A complete deconstruction of the cultural impact and themes of the Harry Potter series in its 20 years of existence.",
+            "poster_path": null
+        },
+        {
+            "popularity": 2.248,
+            "id": 116972,
+            "video": false,
+            "vote_count": 5,
+            "vote_average": 6,
+            "title": "Discovering the Real World of Harry Potter",
+            "release_date": "2001-12-10",
+            "original_language": "en",
+            "original_title": "Discovering the Real World of Harry Potter",
+            "genre_ids": [
+                10751,
+                99
+            ],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "Explore the myths and legends that inhabit the real world of Harry Potter. Follow award-winning documentary filmmakers as they offer insights to witches, wizards, Greek gods, ancient Celts, ghosts, magical creatures, alchemy, and ancient spells. Narrated by British actor Hugh Laurie, this fascinating documentary brings new dimensions to the historical and scientific world behind the Harry Potter series.",
+            "poster_path": "/8XjQmztBzBb2EgrUBnIEF9fdBGC.jpg"
+        },
+        {
+            "popularity": 0.622,
+            "id": 319391,
+            "video": true,
+            "vote_count": 1,
+            "vote_average": 10,
+            "title": "J.K. Rowling and the Birth of Harry Potter",
+            "release_date": "2004-12-07",
+            "original_language": "en",
+            "original_title": "J.K. Rowling and the Birth of Harry Potter",
+            "genre_ids": [
+                99
+            ],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "In this fascinating (unauthorized) biographical documentary, you'll get the inside scoop on the creative force behind one of the greatest publishing phenomena in the last 100 years -- J.K. Rowling, author of the Harry Potter series of books. Explore Rowling's meteoric rise from obscurity into the ranks of the world's richest women (via her books), and visit the people and places that played a significant role in her life.",
+            "poster_path": "/hY6Ndq1O4JiEngZ7xIOtcLUCDTX.jpg"
+        },
+        {
+            "popularity": 0.6,
+            "vote_count": 0,
+            "video": false,
+            "poster_path": "/n5m6sD1qgecgFj0ZIJ0WJzgqnQp.jpg",
+            "id": 636664,
+            "adult": false,
+            "backdrop_path": null,
+            "original_language": "de",
+            "original_title": "Harry Potter und ein Stein",
+            "genre_ids": [],
+            "title": "Harry Potter und ein Stein",
+            "vote_average": 0,
+            "overview": "",
+            "release_date": "2006-11-25"
+        },
+        {
+            "popularity": 0.6,
+            "id": 430481,
+            "video": false,
+            "vote_count": 3,
+            "vote_average": 4,
+            "title": "Harry Potter: Witchcraft Repackaged",
+            "release_date": "2001-01-01",
+            "original_language": "en",
+            "original_title": "Harry Potter: Witchcraft Repackaged",
+            "genre_ids": [
+                99
+            ],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "Does Witchcraft/Wicca actually have power? If so, what is it's source? Does the Harry Potter series ' presentation of child-friendly Witchcraft make it's philosophy any more acceptable just because it is packaged as \"children's fantasy literature\"?",
+            "poster_path": "/xjve882VGrNbyPZDcR7QdapjMaq.jpg"
+        },
+        {
+            "popularity": 0.6,
+            "id": 570724,
+            "video": false,
+            "vote_count": 1,
+            "vote_average": 10,
+            "title": "The Story of Harry Potter",
+            "release_date": "2018-12-24",
+            "original_language": "en",
+            "original_title": "The Story of Harry Potter",
+            "genre_ids": [
+                99
+            ],
+            "backdrop_path": "/tlV4MEmntnKy9Mh46tB1TxBEc46.jpg",
+            "adult": false,
+            "overview": "A three-part documentary series by Mikey Neumann exploring the behind-the-scenes stories of the eight core Harry Potter films, as well as deconstructing their themes and messages.",
+            "poster_path": "/s0FRUpp9nsM0N8F2S7hdIgeAkHy.jpg"
+        },
+        {
+            "popularity": 0.654,
+            "id": 109004,
+            "video": false,
+            "vote_count": 2,
+            "vote_average": 5.3,
+            "title": "The Seeker's Guide to Harry Potter",
+            "release_date": "2010-11-23",
+            "original_language": "en",
+            "original_title": "The Seeker's Guide to Harry Potter",
+            "genre_ids": [
+                99
+            ],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "In this documentary, Dr. Geo Trevarthen uses psychology, theology and other disciplines to explore the mystical world of J.K. Rowling's Harry Potter novels, giving fans a deeper appreciation for the symbolism and magic in the books. Looking at the entire series, Trevarthen pays special attention to how readers' lives may intersect with shamanism and other real-world mystical traditions that echo through the halls of Hogwarts.",
+            "poster_path": "/skMkvsUisKC6Ona9pn0ilws4oHz.jpg"
+        },
+        {
+            "popularity": 0.6,
+            "id": 393135,
+            "video": false,
+            "vote_count": 0,
+            "vote_average": 0,
+            "title": "Harry Potter and the Ten Years Later",
+            "release_date": "2012-10-07",
+            "original_language": "en",
+            "original_title": "Harry Potter and the Ten Years Later",
+            "genre_ids": [],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "Furious Molecules' new parody web series 'Harry Potter and the Ten Years Later' takes a look at our hero ten years after taking down He-Whose-Name-Nobody-Quite-Remembers (but before that sappy epilogue full of kids). Things have changed significantly in Harry's world. With no dark wizards or witches left, the Ministry of Magic's Auror Department shuts down, leaving Harry unemployed. Ginny wants to start a family, Hermione is having doubts about her goody-goody lifestyle, and Ron... well, he's Ron. Everything seems very average in a late-twenties-problem kind of way-- but as always, trouble finds Harry yet again.",
+            "poster_path": "/zh1KtXxbcfj3wj202aEEE2E8V3n.jpg"
+        },
+        {
+            "popularity": 0.917,
+            "id": 256050,
+            "video": false,
+            "vote_count": 2,
+            "vote_average": 6.5,
+            "title": "The Magical World of Harry Potter: The Unauthorized Story of J.K. Rowling",
+            "release_date": "2000-08-08",
+            "original_language": "en",
+            "original_title": "The Magical World of Harry Potter: The Unauthorized Story of J.K. Rowling",
+            "genre_ids": [],
+            "backdrop_path": null,
+            "adult": false,
+            "overview": "The unauthorized story of J.K. Rowling--creator of Harry Potter.",
+            "poster_path": "/h1RmO8hZwXgyl0lazwLoPmUT57s.jpg"
+        }
+    ]
+}

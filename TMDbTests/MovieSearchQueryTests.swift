@@ -125,4 +125,32 @@ class MovieSearchQueryTests: XCTestCase {
         }
         wait(for: [ex], timeout: 1)
     }
+    
+    func testMovieSearchQueryInvalidJSONFailure() {
+        let session = MockNetworkRequest(file: "movie_search_query_invalid_json_failure")
+        let networkManager = NetworkManager(session: session)
+        
+        // Given a valid API key.
+        let apiKey = "2a61185ef6a27f400fd92820ad9e8537"
+        
+        // When the query is a valid Percent encoded string.
+        let percentEncodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        XCTAssertEqual(percentEncodedQuery, "Harry%20Potter")
+
+        // Given a valid API key, incorrect URL, and search term of "".
+        let searchURL = baseURL + apiKey + queryURL + percentEncodedQuery
+
+        let ex = expectation(description: "Waiting for fetch call to succeed.")
+        // Then the fetch query call should fail.
+        networkManager.fetchQuery(searchURL, page: 2) { result in
+            switch result {
+            case .success:
+                XCTFail("This test case should fail due to an incorrectly parsed JSON.")
+            case .failure(let error):
+                XCTAssertEqual(error.localizedDescription, NetworkError.unableToDecodeJSON.localizedDescription)
+                ex.fulfill()
+            }
+        }
+        wait(for: [ex], timeout: 1)
+    }
 }

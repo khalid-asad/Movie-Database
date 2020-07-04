@@ -86,7 +86,7 @@ struct MovieSearchResult: Codable {
         overview = try container.decode(String.self, forKey: .overview)
         
         let releaseDateString = try container.decodeIfPresent(String.self, forKey: .releaseDate)
-        self.releaseDate = releaseDateString?.toDate
+        releaseDate = releaseDateString?.toDate
     }
 }
 

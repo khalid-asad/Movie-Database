@@ -222,12 +222,20 @@ extension MovieViewController {
         searchController.searchBar.scopeButtonTitles = Genres.allCases.map { $0.name }
         searchController.searchBar.delegate = self
         
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: ThemeManager.navigationBarTextColor], for: .normal)
-        UISegmentedControl.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: ThemeManager.navigationBarTextColor], for: .normal)
-        searchController.searchBar.tintColor = ThemeManager.navigationBarTextColor
+        configureSearchBarTheme()
         
         navigationItem.searchController = searchController
         definesPresentationContext = true
+    }
+    
+    /// Configures the Search Bar Segmented Control and Bar Button Item themes.
+    private func configureSearchBarTheme() {
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: ThemeManager.navigationBarTextColor], for: .normal)
+        let segmentedControl = UISegmentedControl.appearance(whenContainedInInstancesOf: [UISearchBar.self])
+        segmentedControl.setTitleTextAttributes([.foregroundColor: ThemeManager.navigationBarTextColor], for: .normal)
+        segmentedControl.setTitleTextAttributes([.foregroundColor: ThemeManager.complementedColor], for: .selected)
+        segmentedControl.selectedSegmentTintColor = ThemeManager.backgroundColor
+        searchController.searchBar.tintColor = ThemeManager.navigationBarTextColor
     }
     
     /// Function to search by cancelling previous requests, and creating a new one.

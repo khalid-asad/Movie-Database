@@ -55,31 +55,25 @@ struct ThemeManager {
         UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0) /* #212121 */
     }
     
-    static var lightColor: UIColor {
-        .white
-    }
+    static var lightColor: UIColor { .white }
         
     static var backgroundColor: UIColor {
         isDarkMode ? ThemeManager.darkColor : ThemeManager.lightColor
+    }
+    
+    static var complementedColor: UIColor {
+        isDarkMode ? ThemeManager.lightColor : ThemeManager.darkColor
     }
     
     static var navigationBarColor: UIColor {
         UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
     }
     
-    static var navigationBarTextColor: UIColor {
-        .black
-    }
+    static var navigationBarTextColor: UIColor { .black }
     
-    static var borderColor: UIColor {
-        isDarkMode ? .white : UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
-    }
+    static var borderColor: UIColor { complementedColor }
     
-    static var textColor: UIColor {
-        isDarkMode ? .white : UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
-    }
+    static var textColor: UIColor { complementedColor }
     
-    static var tableViewCellColor: UIColor {
-        .white
-    }
+    static var tableViewCellColor: UIColor { .white }
 }

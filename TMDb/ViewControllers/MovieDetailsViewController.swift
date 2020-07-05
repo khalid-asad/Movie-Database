@@ -47,8 +47,9 @@ final class MovieDetailsViewController: UIViewController {
                 print(error.localizedDescription)
             }
             
-            self.setUpViews()
-            self.activityIndicator.stopAnimating()
+            self.setUpViews() { [weak self] in
+                self?.activityIndicator.stopAnimating()
+            }
         }
     }
     
@@ -103,7 +104,7 @@ final class MovieDetailsViewController: UIViewController {
 // MARK: - Private Methods
 extension MovieDetailsViewController {
     
-    private func setUpViews() {
+    private func setUpViews(completion: @escaping () -> Void) {
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
@@ -155,7 +156,7 @@ extension MovieDetailsViewController {
                         characterName: characterName,
                         image: image
                     )
-                    self.charactersStackView.addArrangedSubview(characterView)
+                    self.charactersStackView.insertArrangedSubview(characterView, at: 0)
                 }
             } else {
                 let characterView = CharacterView().generateCharacterView(
@@ -168,7 +169,7 @@ extension MovieDetailsViewController {
         }
         
         group.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else { return completion() }
             characterScrollView.addSubview(self.charactersStackView)
             
             NSLayoutConstraint.activate([
@@ -178,6 +179,8 @@ extension MovieDetailsViewController {
                 characterScrollView.heightAnchor.constraint(equalTo: self.charactersStackView.heightAnchor),
                 characterScrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
             ])
+            
+            completion()
         }
     }
 }

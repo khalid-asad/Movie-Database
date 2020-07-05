@@ -15,8 +15,6 @@ final class MovieDetailsViewController: UIViewController {
     
     var creditsModel: CreditsResponse?
     
-    let activityIndicator = UIActivityIndicatorView(style: .medium)
-    
     init(model: MovieSearchResult, image: UIImage) {
         super.init(nibName: nil, bundle: nil)
         self.model = model
@@ -32,10 +30,15 @@ final class MovieDetailsViewController: UIViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = false
         
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.center = view.center
         activityIndicator.startAnimating()
+        activityIndicator.center = view.center
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.view.addSubview(activityIndicator)
+        }
         
         NetworkManager.shared.fetchCredits(for: model.id) { [weak self] result in
             guard let self = self else { return }
@@ -47,9 +50,10 @@ final class MovieDetailsViewController: UIViewController {
                 print(error.localizedDescription)
             }
             
-            self.setUpViews() { [weak self] in
-                self?.activityIndicator.stopAnimating()
+            DispatchQueue.main.async {
+                activityIndicator.stopAnimating()
             }
+            self.setUpViews()
         }
     }
     
@@ -92,6 +96,12 @@ final class MovieDetailsViewController: UIViewController {
         return label
     }()
     
+    var characterScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
     var charactersStackView: UIStackView = {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -101,10 +111,10 @@ final class MovieDetailsViewController: UIViewController {
     }()
 }
 
-// MARK: - Private Methods
+// MARK: - UI Configuration
 extension MovieDetailsViewController {
     
-    private func setUpViews(completion: @escaping () -> Void) {
+    private func setUpViews() {
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
@@ -136,12 +146,30 @@ extension MovieDetailsViewController {
         [titleLabel, ratingView, imageView, descriptionLabel].forEach {
             stackView.addArrangedSubview($0)
         }
-                        
-        let characterScrollView = UIScrollView()
-        characterScrollView.translatesAutoresizingMaskIntoConstraints = false
 
         stackView.addArrangedSubview(characterScrollView)
         
+        downloadCharacterImages { [weak self] in
+            guard let self = self else { return }
+            self.characterScrollView.addSubview(self.charactersStackView)
+            
+            NSLayoutConstraint.activate([
+                self.characterScrollView.topAnchor.constraint(equalTo: self.charactersStackView.topAnchor),
+                self.characterScrollView.leadingAnchor.constraint(equalTo: self.charactersStackView.leadingAnchor),
+                self.characterScrollView.trailingAnchor.constraint(equalTo: self.charactersStackView.trailingAnchor),
+                self.characterScrollView.heightAnchor.constraint(equalTo: self.charactersStackView.heightAnchor),
+                self.characterScrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
+            ])
+        }
+    }
+}
+
+// MARK: - Network Requests
+extension MovieDetailsViewController {
+    
+    /// Downloads the character images on a background thread.
+    /// Generates the Character Views and inserts into the Character Stack View.
+    private func downloadCharacterImages(completion: @escaping () -> Void) {
         let group = DispatchGroup()
         creditsModel?.cast?.forEach() {
             defer { group.leave() }
@@ -168,18 +196,7 @@ extension MovieDetailsViewController {
             }
         }
         
-        group.notify(queue: .main) { [weak self] in
-            guard let self = self else { return completion() }
-            characterScrollView.addSubview(self.charactersStackView)
-            
-            NSLayoutConstraint.activate([
-                characterScrollView.topAnchor.constraint(equalTo: self.charactersStackView.topAnchor),
-                characterScrollView.leadingAnchor.constraint(equalTo: self.charactersStackView.leadingAnchor),
-                characterScrollView.trailingAnchor.constraint(equalTo: self.charactersStackView.trailingAnchor),
-                characterScrollView.heightAnchor.constraint(equalTo: self.charactersStackView.heightAnchor),
-                characterScrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
-            ])
-            
+        group.notify(queue: .main) {
             completion()
         }
     }

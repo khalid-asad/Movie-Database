@@ -167,14 +167,17 @@ extension MovieDetailsViewController {
             }
         }
         
-        characterScrollView.addSubview(charactersStackView)
-        
-        NSLayoutConstraint.activate([
-            characterScrollView.topAnchor.constraint(equalTo: charactersStackView.topAnchor),
-            characterScrollView.leadingAnchor.constraint(equalTo: charactersStackView.leadingAnchor),
-            characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor),
-            characterScrollView.heightAnchor.constraint(equalTo: charactersStackView.heightAnchor),
-            characterScrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
-        ])
+        group.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            characterScrollView.addSubview(self.charactersStackView)
+            
+            NSLayoutConstraint.activate([
+                characterScrollView.topAnchor.constraint(equalTo: self.charactersStackView.topAnchor),
+                characterScrollView.leadingAnchor.constraint(equalTo: self.charactersStackView.leadingAnchor),
+                characterScrollView.trailingAnchor.constraint(equalTo: self.charactersStackView.trailingAnchor),
+                characterScrollView.heightAnchor.constraint(equalTo: self.charactersStackView.heightAnchor),
+                characterScrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
+            ])
+        }
     }
 }

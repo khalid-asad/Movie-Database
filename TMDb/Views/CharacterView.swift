@@ -19,6 +19,8 @@ final class CharacterView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.borderColor = ThemeManager().darkColor.cgColor
         view.layer.borderWidth = 1
+        view.layer.cornerRadius = 5
+        view.layer.masksToBounds = true
         return view
     }()
     
@@ -30,12 +32,15 @@ final class CharacterView: UIView {
         view.alignment = .center
         return view
     }()
-    
+        
     var characterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
         imageView.image = placeholderImage
+        imageView.layer.cornerRadius = 5
+        imageView.layer.masksToBounds = true
+        imageView.clipsToBounds = true
         return imageView
     }()
     

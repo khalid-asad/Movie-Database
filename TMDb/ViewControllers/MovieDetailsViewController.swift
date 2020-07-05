@@ -37,14 +37,14 @@ final class MovieDetailsViewController: UIViewController {
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
         
-        fetchCredits(for: model.id) { [weak self] result in
+        NetworkManager.shared.fetchCredits(for: model.id) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let response):
                 self.creditsModel = response
             case .failure(let error):
-                print(error?.localizedDescription ?? "Unknown error")
+                print(error.localizedDescription)
             }
             
             self.setUpViews()
@@ -159,32 +159,5 @@ extension MovieDetailsViewController {
             characterScrollView.heightAnchor.constraint(equalTo: charactersStackView.heightAnchor),
             characterScrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
-    }
-}
-
-extension MovieDetailsViewController {
-    
-    /// Fetch the credits against the API through URLSession downloadTask.
-    private func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error?>) -> Void) {
-        guard let url = URL(string: StringKeyFormatter.creditsURL(id: id).rawValue) else {
-            return completion(.failure(nil))
-        }
-        
-        DispatchQueue.network.async {
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
-                guard let data = data else {
-                    DispatchQueue.main.async { completion(.failure(nil)) }
-                    return
-                }
-                
-                do {
-                    let responseData = try JSONDecoder().decode(CreditsResponse.self, from: data)
-                    DispatchQueue.main.async { completion(.success(responseData)) }
-                } catch let err {
-                    print("Err", err)
-                    DispatchQueue.main.async { completion(.failure(err)) }
-                }
-            }.resume()
-        }
     }
 }

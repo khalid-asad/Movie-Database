@@ -6,6 +6,7 @@
 //  Copyright © 2020 Khalid Asad. All rights reserved.
 //
 
+/// Various networking errors encountered.
 enum NetworkError: TMDbError, Equatable {
     case emptyResponse
     case invalidAPIKey
@@ -43,6 +44,7 @@ enum NetworkError: TMDbError, Equatable {
         }
     }
     
+    /// The status code of the TMDb API.
     var statusCode: Int? {
         switch self {
         case .invalidAPIKey: return 7

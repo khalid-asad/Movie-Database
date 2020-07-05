@@ -34,7 +34,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        // Upon changing the orientation of the device, reset the size of the tableView
+        // Upon changing the orientation of the device, reset the size of the tableView.
         tableView.frame = CGRect(
             x: 0,
             y: UIApplication.shared.statusBarFrame.size.height,
@@ -43,12 +43,10 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
         )
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       return 128
-    }
-        
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 128 }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return model.items.count
+        model.items.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -62,44 +60,41 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // When scrolling past the last cell, load the next page of data
+        // When scrolling past the last cell, load the next page of data.
         if indexPath.row == model.items.count - 1 , let searchQuery = searchQuery {
             fetch(query: searchQuery)
         }
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as? MovieTableViewCell,
             let movie = model.items[safe: (indexPath as NSIndexPath).row]
-        else {
-            return MovieTableViewCell()
-        }
+        else { return MovieTableViewCell() }
         
         cell.movieNameLabel.text = movie.title
         cell.movieDescriptionLabel.text = movie.overview
-        // Set a placeholder image
         cell.movieImageView.image = MovieViewController.placeHolderImage
         
-        // If there is a cached image, set it to the view
-        guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil  else {
+        // If there is a cached image, set it to the view.
+        guard model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) == nil else {
             cell.movieImageView.image = model.cache.object(forKey: (indexPath as NSIndexPath).row as AnyObject) as? UIImage
             return cell
         }
         
-        // If the url does not exist, simply return the cell
+        // If the url does not exist, simply return the cell.
         guard let backdropPath = movie.backdropPath,
             let url = URL(string: StringKey.imageBaseURL.rawValue + backdropPath)
         else { return cell }
         
-        // Add an activity indicator on the Image
+        // Add an activity indicator on the Image.
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.frame = cell.movieImageView.bounds
         cell.movieImageView.addSubview(activityIndicator)
         activityIndicator.startAnimating()
         
-        // Download the image, and set it if it's available
+        // Download the image, and set it if it's available.
         model.fetchImage(url: url, completion: { [weak self] cellImage in
             guard let self = self else { return }
             DispatchQueue.main.async(execute: { [weak self] () -> Void in
-                // Indirectly access the cell in an Async method to prevent memory leaks
+                // Indirectly access the cell in an Async method to prevent memory leaks.
                 activityIndicator.stopAnimating()
                 activityIndicator.removeFromSuperview()
                 if let updateCell = tableView.cellForRow(at: indexPath) as? MovieTableViewCell {
@@ -117,7 +112,7 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
 // MARK: - Search Controller
 extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
     
-    /// Protocol function for searching
+    /// Protocol function for searching.
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         guard let searchBarText = searchBar.text else { return }
@@ -125,7 +120,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         search(for: searchBarText)
     }
     
-    /// Protocol function for text changing, we want to clear the cache and then search
+    /// Protocol function for text changing, we want to clear the cache and then search.
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchBarText = searchBar.text else { return }
         // Search with the text from the Search Bar
@@ -133,7 +128,7 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
         search(for: searchBarText)
     }
     
-    /// Protocol function for Scopes (so we can sort by Genres)
+    /// Protocol function for Scopes (so we can sort by Genres).
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         searchScope = Genres.allCases[selectedScope]
         search(for: searchBar.text ?? "")
@@ -159,17 +154,16 @@ extension MovieViewController: UISearchResultsUpdating, UISearchBarDelegate {
 // MARK: - Private Methods
 extension MovieViewController {
     
-    /// Asynchronously reload the tableView data and end refreshing
+    /// Asynchronously reload the tableView data and end refreshing.
     private func reloadData() {
         DispatchQueue.main.async { [weak self] in
-            assert(Thread.isMainThread)
             guard let self = self else { return }
             self.tableView.reloadData()
             self.tableView.refreshControl?.endRefreshing()
         }
     }
     
-    /// Configure the navigation bar theme
+    /// Configure the navigation bar theme.
     private func configureNavigationBar() {
         guard let navigationController = navigationController else { return }
         let navigationBar = navigationController.navigationBar
@@ -183,7 +177,7 @@ extension MovieViewController {
         title = "TMDb"
     }
     
-    /// Configure the Table View
+    /// Configure the Table View.
     private func configureTableView() {
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = view.frame.width
@@ -206,14 +200,14 @@ extension MovieViewController {
         // Create a refresh control and target it to the reloadTableView function for any values changed
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(reloadTableView), for: .valueChanged)
-        tableView.refreshControl = self.refreshControl
+        tableView.refreshControl = refreshControl
         
         // Set the initial cache and data within the model to be empty
         model.cache = NSCache()
         model.items = []
     }
     
-    /// Configures the Search Controller in the Navigation bar
+    /// Configures the Search Controller in the Navigation bar.
     private func configureSearchController() {
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -226,22 +220,22 @@ extension MovieViewController {
         definesPresentationContext = true
     }
     
-    /// Function to search by cancelling previous requests, and creating a new one
+    /// Function to search by cancelling previous requests, and creating a new one.
     private func search(for text: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(reloadTableView), object: nil)
         clearDataAndCache()
         searchQuery = text
-        perform(#selector(reloadTableView), with: nil, afterDelay: 0.15)
+        perform(#selector(reloadTableView), with: nil, afterDelay: 0.25)
     }
     
-    /// Clears the cache in the model, then reloads the data in the table view
+    /// Clears the cache in the model, then reloads the data in the table view.
     private func clearDataAndCache() {
         model.items.removeAll()
         model.cache.removeAllObjects()
         reloadData()
     }
     
-    /// Reload the table view by fetching the search query
+    /// Reload the table view by fetching the search query.
     @objc
     private func reloadTableView() {
         // If search query is non-existent then wipe the data and cache and return
@@ -252,8 +246,8 @@ extension MovieViewController {
         fetch(query: searchQuery, page: 1)
     }
     
+    /// Fetches the search results from the API through the model.
     private func fetch(query: String, page: Int? = nil) {
-        // Fetch the search results from the API through the model
         model.fetchQuery(query, page: page) { [weak self] result in
             guard let self = self else { return }
             switch result {

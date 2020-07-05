@@ -22,6 +22,10 @@ final class NetworkManager: NetworkRequestProtocol {
         session.fetchQuery(term, page: page, completion: completion)
     }
     
+    func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error>) -> Void) {
+        session.fetchCredits(for: id, completion: completion)
+    }
+    
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
         session.fetchImage(url: url, completion: completion)
     }

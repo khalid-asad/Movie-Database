@@ -24,7 +24,7 @@ public enum FetchInfoState<T, U> {
 // MARK: - Network Requests
 extension MovieModel {
     
-    /// Fetch the query search term against the API through URLSession downloadTask
+    /// Fetch the query search term against the API through URLSession downloadTask.
     func fetchQuery(_ term: String, page: Int? = nil, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error>) -> Void) {
         let page = page ?? ((items.count / 20) + 1)
         NetworkManager.shared.fetchQuery(term, page: page) { [weak self] result in
@@ -37,7 +37,7 @@ extension MovieModel {
         }
     }
     
-    /// Download the image
+    /// Download the image.
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
         NetworkManager.shared.fetchImage(url: url, completion: completion)
     }

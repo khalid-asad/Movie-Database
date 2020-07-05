@@ -10,6 +10,7 @@ import Foundation
 
 extension Double {
     
+    /// Rounds off the double value to the nearest input value.
     func round(nearest: Double) -> Double {
         let n = 1 / nearest
         let numberToRound = self * n

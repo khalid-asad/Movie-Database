@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// An error unique to TMDb
+/// An error unique to TMDb.
 protocol TMDbError: LocalizedError {
     
     /// The readable error message.

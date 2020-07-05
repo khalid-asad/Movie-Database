@@ -24,7 +24,12 @@ final class MockNetworkRequest: NetworkRequestProtocol {
         if let error = error { return completion(.failure(error)) }
         MockJSONLoader().load(file, completion: completion)
     }
-        
+
+    func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error>) -> Void) {
+        if let error = error { return completion(.failure(error)) }
+        MockJSONLoader().load(file, completion: completion)
+    }
+
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
         completion(nil)
     }

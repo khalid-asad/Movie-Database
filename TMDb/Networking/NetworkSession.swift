@@ -39,6 +39,28 @@ final class NetworkSession: NetworkRequestProtocol {
         }
     }
     
+    func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error>) -> Void) {
+        guard let url = URL(string: StringKeyFormatter.creditsURL(id: id).rawValue) else {
+            return completion(.failure(NetworkError.invalidURL))
+        }
+        
+        DispatchQueue.network.async {
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data else {
+                    return DispatchQueue.main.async { completion(.failure(NetworkError.noData)) }
+                }
+                
+                do {
+                    let responseData = try JSONDecoder().decode(CreditsResponse.self, from: data)
+                    DispatchQueue.main.async { completion(.success(responseData)) }
+                } catch let err {
+                    print("Err", err)
+                    DispatchQueue.main.async { completion(.failure(err)) }
+                }
+            }.resume()
+        }
+    }
+    
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {
         DispatchQueue.network.async {
             URLSession.shared.downloadTask(with: url, completionHandler: { (location, response, error) -> Void in

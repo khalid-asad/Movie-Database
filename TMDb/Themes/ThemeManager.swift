@@ -11,7 +11,12 @@ import UIKit
 
 struct ThemeManager {
         
+    static var overrideDarkModeFlag: Bool? { true }
+    
     static var isDarkMode: Bool {
+        if let overrideDarkModeFlag = overrideDarkModeFlag {
+            return overrideDarkModeFlag
+        }
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
           let sceneDelegate = windowScene.delegate as? SceneDelegate
         else { return false }
@@ -63,7 +68,7 @@ struct ThemeManager {
     }
     
     static var navigationBarTextColor: UIColor {
-        isDarkMode ? .white : .black
+        .black
     }
     
     static var borderColor: UIColor {

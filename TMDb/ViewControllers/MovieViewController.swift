@@ -24,6 +24,8 @@ final class MovieViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
                         
+        overrideUserInterfaceStyle = .dark
+        
         model = MovieModel()
 
         configureNavigationBar()
@@ -219,6 +221,10 @@ extension MovieViewController {
         searchController.searchBar.placeholder = "Search Movies"
         searchController.searchBar.scopeButtonTitles = Genres.allCases.map { $0.name }
         searchController.searchBar.delegate = self
+        
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: ThemeManager.navigationBarTextColor], for: .normal)
+        UISegmentedControl.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: ThemeManager.navigationBarTextColor], for: .normal)
+        searchController.searchBar.tintColor = ThemeManager.navigationBarTextColor
         
         navigationItem.searchController = searchController
         definesPresentationContext = true

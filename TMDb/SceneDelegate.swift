@@ -23,16 +23,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController(rootViewController: MovieViewController())
         window?.rootViewController = navigationController
         
-        window?.backgroundColor = (window?.traitCollection.userInterfaceStyle == .light || window?.traitCollection.userInterfaceStyle == .unspecified) ? ThemeManager().lightColor : ThemeManager().darkColor
+        window?.backgroundColor = ThemeManager.backgroundColor
         
         if let statusBarFrame = window?.windowScene?.statusBarManager?.statusBarFrame {
             let statusBar = UIView()
             statusBar.frame = statusBarFrame
-            statusBar.backgroundColor = ThemeManager().navigationBarColor
+            statusBar.backgroundColor = ThemeManager.navigationBarColor
             window?.addSubview(statusBar)
         }
         
-        UINavigationBar.appearance().barTintColor = ThemeManager().navigationBarColor
+        UINavigationBar.appearance().barTintColor = ThemeManager.navigationBarColor
         
         window?.makeKeyAndVisible()
     }

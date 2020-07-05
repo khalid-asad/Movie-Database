@@ -17,7 +17,7 @@ final class CharacterView: UIView {
     var characterView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.borderColor = ThemeManager().darkColor.cgColor
+        view.layer.borderColor = ThemeManager.borderColor.cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 5
         view.layer.masksToBounds = true

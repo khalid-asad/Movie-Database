@@ -21,7 +21,7 @@ class MovieTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        backgroundColor = .clear
+        backgroundColor = ThemeManager.backgroundColor
         
         // Provide a placeholder image, and make sure content mode is aspect fit
         movieImageView.contentMode = .scaleAspectFit
@@ -34,12 +34,12 @@ class MovieTableViewCell: UITableViewCell {
         }
         
         // Set font for labels using a custom Theme Manager
-        movieNameLabel.font = ThemeManager().titleFont
-        movieDescriptionLabel.font = ThemeManager().subTitleFont
+        movieNameLabel.font = ThemeManager.titleFont
+        movieDescriptionLabel.font = ThemeManager.subTitleFont
         
         // Ensure the labels can handle multiple lines
         [movieNameLabel, movieDescriptionLabel].forEach() {
-            $0.textColor = ThemeManager().darkColor
+            $0.textColor = ThemeManager.textColor
             $0.numberOfLines = 0
         }
         

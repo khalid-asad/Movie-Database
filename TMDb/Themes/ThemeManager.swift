@@ -11,50 +11,70 @@ import UIKit
 
 struct ThemeManager {
         
+    static var isDarkMode: Bool {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+          let sceneDelegate = windowScene.delegate as? SceneDelegate
+        else { return false }
+        let window = sceneDelegate.window
+        return window?.traitCollection.userInterfaceStyle == .light || window?.traitCollection.userInterfaceStyle == .unspecified
+    }
+    
     // MARK: - Fonts
-    var headerFont: UIFont {
+    static var headerFont: UIFont {
         guard let font = UIFont(name: "Helvetica-Bold", size: 32) else { return UIFont.systemFont(ofSize: 32, weight: .bold)}
         return font
     }
     
-    var subHeaderFont: UIFont {
+    static var subHeaderFont: UIFont {
         guard let font = UIFont(name: "Helvetica", size: 20) else { return UIFont.systemFont(ofSize: 20) }
         return font
     }
     
-    var titleFont: UIFont {
+    static var titleFont: UIFont {
         guard let font = UIFont(name: "Helvetica-Bold", size: 20) else { return UIFont.systemFont(ofSize: 20, weight: .bold)}
         return font
     }
     
-    var subTitleFont: UIFont {
+    static var subTitleFont: UIFont {
         guard let font = UIFont(name: "Helvetica", size: 14) else { return UIFont.systemFont(ofSize: 16)}
         return font
     }
     
-    var smallTitleFont: UIFont {
+    static var smallTitleFont: UIFont {
         guard let font = UIFont(name: "Helvetica", size: 12) else { return UIFont.systemFont(ofSize: 12)}
         return font
     }
     
     // MARK: - Colors
-    var darkColor: UIColor {
-        return UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0) /* #212121 */
+    static var darkColor: UIColor {
+        UIColor(red: 33/255, green: 33/255, blue: 33/255, alpha: 1.0) /* #212121 */
     }
     
-    var lightColor: UIColor {
-        return .white
+    static var lightColor: UIColor {
+        .white
     }
         
-    var navigationBarColor: UIColor {
-        return UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
+    static var backgroundColor: UIColor {
+        isDarkMode ? ThemeManager.darkColor : ThemeManager.lightColor
     }
     
-    var textColor: UIColor {
-        return UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
+    static var navigationBarColor: UIColor {
+        UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
     }
     
-    var tableViewCellColor: UIColor {
-        return .white
+    static var navigationBarTextColor: UIColor {
+        isDarkMode ? .white : .black
+    }
+    
+    static var borderColor: UIColor {
+        isDarkMode ? .white : UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
+    }
+    
+    static var textColor: UIColor {
+        isDarkMode ? .white : UIColor(red:0.18, green:0.80, blue:0.44, alpha:1.0)
+    }
+    
+    static var tableViewCellColor: UIColor {
+        .white
     }
 }

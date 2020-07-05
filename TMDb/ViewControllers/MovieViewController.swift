@@ -169,10 +169,12 @@ extension MovieViewController {
         let navigationBar = navigationController.navigationBar
         
         navigationBar.prefersLargeTitles = true
-        navigationBar.backgroundColor = ThemeManager().navigationBarColor
-        navigationBar.tintColor = ThemeManager().darkColor
+        navigationBar.backgroundColor = ThemeManager.navigationBarColor
+        navigationBar.tintColor = ThemeManager.navigationBarTextColor
         
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        let backButton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        backButton.tintColor = ThemeManager.navigationBarTextColor
+        navigationItem.backBarButtonItem = backButton
         
         title = "TMDb"
     }
@@ -194,6 +196,8 @@ extension MovieViewController {
         // Set the data source and delegate to the current VC
         tableView.dataSource = self
         tableView.delegate = self
+        
+        tableView.backgroundColor = ThemeManager.backgroundColor
         
         view.addSubview(tableView)
         

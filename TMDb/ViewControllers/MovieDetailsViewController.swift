@@ -28,6 +28,8 @@ final class MovieDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = ThemeManager.backgroundColor
+        
         navigationController?.navigationBar.prefersLargeTitles = false
         
         let activityIndicator = UIActivityIndicatorView(style: .medium)

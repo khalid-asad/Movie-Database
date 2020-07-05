@@ -141,13 +141,30 @@ extension MovieDetailsViewController {
 
         stackView.addArrangedSubview(characterScrollView)
         
+        let group = DispatchGroup()
         creditsModel?.cast?.forEach() {
-            let characterView = CharacterView().generateCharacterView(
-                actorName: $0.name,
-                characterName: $0.character,
-                path: $0.profilePath
-            )
-            charactersStackView.addArrangedSubview(characterView)
+            defer { group.leave() }
+            group.enter()
+            let actorName = $0.name
+            let characterName = $0.character
+            if let path = $0.profilePath , let url = URL(string: StringKey.imageBaseURL.rawValue + path) {
+                NetworkManager.shared.fetchImage(url: url) { [weak self] image in
+                    guard let self = self else { return }
+                    let characterView = CharacterView().generateCharacterView(
+                        actorName: actorName,
+                        characterName: characterName,
+                        image: image
+                    )
+                    self.charactersStackView.addArrangedSubview(characterView)
+                }
+            } else {
+                let characterView = CharacterView().generateCharacterView(
+                    actorName: $0.name,
+                    characterName: $0.character,
+                    image: nil
+                )
+                charactersStackView.addArrangedSubview(characterView)
+            }
         }
         
         characterScrollView.addSubview(charactersStackView)

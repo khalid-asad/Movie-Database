@@ -35,6 +35,7 @@ final class CharacterView: UIView {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.image = placeholderImage
         return imageView
     }()
     
@@ -56,30 +57,15 @@ final class CharacterView: UIView {
         return label
     }()
     
-    func generateCharacterView(actorName: String?, characterName: String?, path: String?) -> UIView {
+    func generateCharacterView(actorName: String?, characterName: String?, image: UIImage?) -> UIView {
         guard let actorName = actorName, let characterName = characterName else {
             return UIView()
         }
         
         actorNameLabel.text = actorName
         characterNameLabel.text = characterName
-        characterImageView.image = CharacterView.placeholderImage
-        
-        if let path = path , let url = URL(string: StringKey.imageBaseURL.rawValue + path) {
-            let activityIndicator = UIActivityIndicatorView(style: .medium)
-            activityIndicator.center = characterImageView.center
-            characterImageView.addSubview(activityIndicator)
-            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-            activityIndicator.hidesWhenStopped = true
-            
-            DispatchQueue.main.async { activityIndicator.startAnimating() }
-            
-            fetchImage(url: url) { [weak self] image in
-                DispatchQueue.main.async { [weak self] in
-                    activityIndicator.stopAnimating()
-                    self?.characterImageView.image = image ?? CharacterView.placeholderImage
-                }
-            }
+        if let image = image {
+            characterImageView.image = image
         }
         
         NSLayoutConstraint.activate([

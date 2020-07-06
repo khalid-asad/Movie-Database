@@ -47,47 +47,14 @@ final class MovieDetailsViewController: UIViewController {
         let group = DispatchGroup()
         
         group.enter()
-        NetworkManager.shared.fetchMovieImageDetails(for: model.id) { result in
-            defer { group.leave() }
-            switch result {
-            case .success(let imageDetails):
-                let imageDownloadGroup = DispatchGroup()
-                var movieImagesStack = [UIImage]()
-                let backdrops = imageDetails?.backdrops ?? []
-                let posters = imageDetails?.posters ?? []
-                let imagesToDownload = backdrops + posters
-                imagesToDownload.forEach() {
-                    imageDownloadGroup.enter()
-                    guard let url = URL(string: StringKey.imageBaseURL.rawValue + $0.filePath)  else {
-                        imageDownloadGroup.leave()
-                        return
-                    }
-                    NetworkManager.shared.fetchImage(url: url) { image in
-                        if let image = image {
-                            movieImagesStack.append(image)
-                            imageDownloadGroup.leave()
-                        }
-                    }
-                }
-                imageDownloadGroup.notify(queue: .main) {
-                    print(movieImagesStack)
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+        downloadMovieImages() {
+            group.leave()
         }
         
         group.enter()
-        NetworkManager.shared.fetchCredits(for: model.id) { [weak self] result in
-            defer { group.leave() }
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let response):
-                self.creditsModel = response
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+        fetchCredits { [weak self] in
+            guard let self = self else { return group.leave() }
+            self.downloadCharacterImages { group.leave() }
         }
         
         group.notify(queue: .main) { [weak self] in
@@ -199,8 +166,6 @@ extension MovieDetailsViewController {
             characterScrollView.heightAnchor.constraint(equalTo: charactersStackView.heightAnchor),
             characterScrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
-        
-        downloadCharacterImages { }
     }
 }
 
@@ -242,6 +207,56 @@ extension MovieDetailsViewController {
         
         group.notify(queue: .main) {
             completion()
+        }
+    }
+    
+    /// Downloads the movie images on a background thread.
+    /// Generates the Movie Images and inserts into the Movie Stack View.
+    private func downloadMovieImages(completion: @escaping () -> Void) {
+        NetworkManager.shared.fetchMovieImageDetails(for: model.id) { result in
+            switch result {
+            case .success(let imageDetails):
+                let imageDownloadGroup = DispatchGroup()
+                var movieImagesStack = [UIImage]()
+                let backdrops = imageDetails?.backdrops ?? []
+                let posters = imageDetails?.posters ?? []
+                let imagesToDownload = backdrops + posters
+                imagesToDownload.forEach() {
+                    imageDownloadGroup.enter()
+                    guard let url = URL(string: StringKey.imageBaseURL.rawValue + $0.filePath)  else {
+                        imageDownloadGroup.leave()
+                        return
+                    }
+                    NetworkManager.shared.fetchImage(url: url) { image in
+                        if let image = image {
+                            movieImagesStack.append(image)
+                            imageDownloadGroup.leave()
+                        }
+                    }
+                }
+                imageDownloadGroup.notify(queue: .main) {
+                    print(movieImagesStack)
+                    completion()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+                completion()
+            }
+        }
+    }
+    
+    /// Fetches the movie credits on a background thread.
+    private func fetchCredits(completion: @escaping () -> Void) {
+        NetworkManager.shared.fetchCredits(for: model.id) { [weak self] result in
+            defer { completion() }
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let response):
+                self.creditsModel = response
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
         }
     }
 }

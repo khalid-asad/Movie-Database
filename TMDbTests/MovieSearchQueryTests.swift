@@ -72,7 +72,7 @@ class MovieSearchQueryTests: XCTestCase {
     }
     
     func testMovieSearchQueryUnauthorizedFailure() {
-        let session = MockNetworkRequest(file: "movie_search_query_invalid_api_key")
+        let session = MockNetworkRequest(file: "tmdb_invalid_api_key")
         let networkManager = NetworkManager(session: session)
         
         // Given a fake API key.
@@ -99,7 +99,7 @@ class MovieSearchQueryTests: XCTestCase {
     }
     
     func testMovieSearchQueryURLNotFoundFailure() {
-        let session = MockNetworkRequest(file: "movie_search_query_url_not_found")
+        let session = MockNetworkRequest(file: "tmdb_url_not_found")
         let networkManager = NetworkManager(session: session)
         
         // Given a valid API key.

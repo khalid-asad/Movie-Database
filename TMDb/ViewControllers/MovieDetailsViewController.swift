@@ -44,7 +44,42 @@ final class MovieDetailsViewController: UIViewController {
             self?.view.addSubview(activityIndicator)
         }
         
+        let group = DispatchGroup()
+        
+        group.enter()
+        NetworkManager.shared.fetchMovieImageDetails(for: model.id) { result in
+            defer { group.leave() }
+            switch result {
+            case .success(let imageDetails):
+                let imageDownloadGroup = DispatchGroup()
+                var movieImagesStack = [UIImage]()
+                let backdrops = imageDetails?.backdrops ?? []
+                let posters = imageDetails?.posters ?? []
+                let imagesToDownload = backdrops + posters
+                imagesToDownload.forEach() {
+                    imageDownloadGroup.enter()
+                    guard let url = URL(string: StringKey.imageBaseURL.rawValue + $0.filePath)  else {
+                        imageDownloadGroup.leave()
+                        return
+                    }
+                    NetworkManager.shared.fetchImage(url: url) { image in
+                        if let image = image {
+                            movieImagesStack.append(image)
+                            imageDownloadGroup.leave()
+                        }
+                    }
+                }
+                imageDownloadGroup.notify(queue: .main) {
+                    print(movieImagesStack)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        
+        group.enter()
         NetworkManager.shared.fetchCredits(for: model.id) { [weak self] result in
+            defer { group.leave() }
             guard let self = self else { return }
             
             switch result {
@@ -53,11 +88,13 @@ final class MovieDetailsViewController: UIViewController {
             case .failure(let error):
                 print(error.localizedDescription)
             }
-            
+        }
+        
+        group.notify(queue: .main) { [weak self] in
             DispatchQueue.main.async {
                 activityIndicator.stopAnimating()
             }
-            self.setUpViews()
+            self?.setUpViews()
         }
     }
     
@@ -153,18 +190,17 @@ extension MovieDetailsViewController {
 
         stackView.addArrangedSubview(characterScrollView)
         
-        downloadCharacterImages { [weak self] in
-            guard let self = self else { return }
-            self.characterScrollView.addSubview(self.charactersStackView)
-            
-            NSLayoutConstraint.activate([
-                self.characterScrollView.topAnchor.constraint(equalTo: self.charactersStackView.topAnchor),
-                self.characterScrollView.leadingAnchor.constraint(equalTo: self.charactersStackView.leadingAnchor),
-                self.characterScrollView.trailingAnchor.constraint(equalTo: self.charactersStackView.trailingAnchor),
-                self.characterScrollView.heightAnchor.constraint(equalTo: self.charactersStackView.heightAnchor),
-                self.characterScrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor)
-            ])
-        }
+        characterScrollView.addSubview(charactersStackView)
+        
+        NSLayoutConstraint.activate([
+            characterScrollView.topAnchor.constraint(equalTo: charactersStackView.topAnchor),
+            characterScrollView.leadingAnchor.constraint(equalTo: charactersStackView.leadingAnchor),
+            characterScrollView.trailingAnchor.constraint(equalTo: charactersStackView.trailingAnchor),
+            characterScrollView.heightAnchor.constraint(equalTo: charactersStackView.heightAnchor),
+            characterScrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        
+        downloadCharacterImages { }
     }
 }
 
@@ -176,19 +212,22 @@ extension MovieDetailsViewController {
     private func downloadCharacterImages(completion: @escaping () -> Void) {
         let group = DispatchGroup()
         creditsModel?.cast?.forEach() {
-            defer { group.leave() }
             group.enter()
             let actorName = $0.name
             let characterName = $0.character
             if let path = $0.profilePath , let url = URL(string: StringKey.imageBaseURL.rawValue + path) {
                 NetworkManager.shared.fetchImage(url: url) { [weak self] image in
-                    guard let self = self else { return }
+                    guard let self = self else {
+                        group.leave()
+                        return
+                    }
                     let characterView = CharacterView().generateCharacterView(
                         actorName: actorName,
                         characterName: characterName,
                         image: image
                     )
                     self.charactersStackView.insertArrangedSubview(characterView, at: 0)
+                    group.leave()
                 }
             } else {
                 let characterView = CharacterView().generateCharacterView(
@@ -197,6 +236,7 @@ extension MovieDetailsViewController {
                     image: nil
                 )
                 charactersStackView.addArrangedSubview(characterView)
+                group.leave()
             }
         }
         

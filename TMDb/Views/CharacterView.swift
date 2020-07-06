@@ -21,6 +21,7 @@ final class CharacterView: UIView {
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 5
         view.layer.masksToBounds = true
+        view.isUserInteractionEnabled = true
         return view
     }()
     

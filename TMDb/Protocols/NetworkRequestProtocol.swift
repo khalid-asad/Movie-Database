@@ -19,6 +19,10 @@ protocol NetworkRequestProtocol {
     /// - parameter id: The respective movie ID to query against.
     func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error>) -> Void)
     
+    /// Fetches the Movie Image Details against the API through URLSession downloadTask.
+    /// - parameter id: The respective movie ID to query against.
+    func fetchMovieImageDetails(for id: Int, completion: @escaping (FetchInfoState<MovieImages?, Error>) -> Void)
+    
     /// Downloads an image with a URL.
     /// - parameter url: The URL to download the image from.
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void)

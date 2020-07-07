@@ -29,6 +29,8 @@
 		198D56C824B2B9A60091B491 /* movie_cast_invalid_json_failure.json in Resources */ = {isa = PBXBuildFile; fileRef = 198D56C724B2B9A60091B491 /* movie_cast_invalid_json_failure.json */; };
 		198D56CB24B2C1F40091B491 /* movie_images_success.json in Resources */ = {isa = PBXBuildFile; fileRef = 198D56CA24B2C1F40091B491 /* movie_images_success.json */; };
 		198D56CD24B2C20F0091B491 /* MovieImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198D56CC24B2C20F0091B491 /* MovieImages.swift */; };
+		198D56CF24B4324C0091B491 /* MovieImagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198D56CE24B4324C0091B491 /* MovieImagesTests.swift */; };
+		198D56D124B434070091B491 /* movie_images_json_decoding_failure.json in Resources */ = {isa = PBXBuildFile; fileRef = 198D56D024B434070091B491 /* movie_images_json_decoding_failure.json */; };
 		19BD1118237A4BC9000268CD /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19BD1117237A4BC9000268CD /* MovieModel.swift */; };
 		19BD111B237A4CB0000268CD /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19BD111A237A4CB0000268CD /* MovieTableViewCell.swift */; };
 		19BD111E237A4D1E000268CD /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19BD111D237A4D1E000268CD /* ThemeManager.swift */; };
@@ -85,6 +87,8 @@
 		198D56C724B2B9A60091B491 /* movie_cast_invalid_json_failure.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = movie_cast_invalid_json_failure.json; sourceTree = "<group>"; };
 		198D56CA24B2C1F40091B491 /* movie_images_success.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = movie_images_success.json; sourceTree = "<group>"; };
 		198D56CC24B2C20F0091B491 /* MovieImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieImages.swift; sourceTree = "<group>"; };
+		198D56CE24B4324C0091B491 /* MovieImagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieImagesTests.swift; sourceTree = "<group>"; };
+		198D56D024B434070091B491 /* movie_images_json_decoding_failure.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = movie_images_json_decoding_failure.json; sourceTree = "<group>"; };
 		19BD1117237A4BC9000268CD /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
 		19BD111A237A4CB0000268CD /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
 		19BD111D237A4D1E000268CD /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
@@ -166,6 +170,7 @@
 			children = (
 				19FE7308237BCCCC002B68D0 /* Mock */,
 				198D56C524B2B5F70091B491 /* MovieCreditsTests.swift */,
+				198D56CE24B4324C0091B491 /* MovieImagesTests.swift */,
 				1930F4B4237A49CA0053F37C /* MovieSearchQueryTests.swift */,
 				1930F4B6237A49CA0053F37C /* Info.plist */,
 			);
@@ -220,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				198D56CA24B2C1F40091B491 /* movie_images_success.json */,
+				198D56D024B434070091B491 /* movie_images_json_decoding_failure.json */,
 			);
 			path = MovieImages;
 			sourceTree = "<group>";
@@ -405,6 +411,7 @@
 				198D56B324B13B830091B491 /* movie_search_query_invalid_json_failure.json in Resources */,
 				198D56CB24B2C1F40091B491 /* movie_images_success.json in Resources */,
 				198D56C824B2B9A60091B491 /* movie_cast_invalid_json_failure.json in Resources */,
+				198D56D124B434070091B491 /* movie_images_json_decoding_failure.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +456,7 @@
 			files = (
 				19E9649A237CF97D000E636E /* MockNetworkRequest.swift in Sources */,
 				1930F4B5237A49CA0053F37C /* MovieSearchQueryTests.swift in Sources */,
+				198D56CF24B4324C0091B491 /* MovieImagesTests.swift in Sources */,
 				198D56A924B129F20091B491 /* MockJSONLoader.swift in Sources */,
 				198D56C624B2B5F70091B491 /* MovieCreditsTests.swift in Sources */,
 			);

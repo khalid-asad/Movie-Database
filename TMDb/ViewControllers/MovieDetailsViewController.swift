@@ -89,6 +89,20 @@ final class MovieDetailsViewController: UIViewController {
         return label
     }()
     
+    var imagesScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    var imagesStackView: UIStackView = {
+        let view = UIStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .horizontal
+        view.spacing = 2
+        return view
+    }()
+    
     var imageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -145,16 +159,25 @@ extension MovieDetailsViewController {
         imageView.image = image
         descriptionLabel.text = model.overview
         
-        NSLayoutConstraint.activate([
-            imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 288)
-        ])
-        
         let ratingView = RatingView().generateRatingView(voteAverage: model.voteAverage)
         
-        [titleLabel, ratingView, imageView, descriptionLabel].forEach {
+        [titleLabel, ratingView, imagesScrollView, descriptionLabel].forEach {
             stackView.addArrangedSubview($0)
         }
-
+        
+        imagesScrollView.addSubview(imagesStackView)
+        
+        NSLayoutConstraint.activate([
+            imagesScrollView.topAnchor.constraint(equalTo: imagesStackView.topAnchor),
+            imagesScrollView.heightAnchor.constraint(equalTo: imagesStackView.heightAnchor),
+            imagesScrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        
+        let isOnlyOneMovieImage = imagesStackView.arrangedSubviews.count == 1
+        imagesScrollView.leadingAnchor.constraint(equalTo: imagesStackView.leadingAnchor).isActive = !isOnlyOneMovieImage
+        imagesScrollView.trailingAnchor.constraint(equalTo: imagesStackView.trailingAnchor).isActive = !isOnlyOneMovieImage
+        imagesScrollView.centerXAnchor.constraint(equalTo: imagesStackView.centerXAnchor).isActive = isOnlyOneMovieImage
+        
         stackView.addArrangedSubview(characterScrollView)
         
         characterScrollView.addSubview(charactersStackView)
@@ -166,6 +189,15 @@ extension MovieDetailsViewController {
             characterScrollView.heightAnchor.constraint(equalTo: charactersStackView.heightAnchor),
             characterScrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
+    }
+    
+    private func createMovieImageView(from image: UIImage) {
+        let imageView = UIImageView(image: image)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.heightAnchor.constraint(lessThanOrEqualToConstant: 300).isActive = true
+        imageView.widthAnchor.constraint(lessThanOrEqualToConstant: 200).isActive = true
+        imagesStackView.addArrangedSubview(imageView)
     }
 }
 
@@ -216,26 +248,25 @@ extension MovieDetailsViewController {
         NetworkManager.shared.fetchMovieImageDetails(for: model.id) { result in
             switch result {
             case .success(let imageDetails):
+                guard let imagesToDownload = imageDetails?.backdrops else {
+                    return completion()
+                }
                 let imageDownloadGroup = DispatchGroup()
-                var movieImagesStack = [UIImage]()
-                let backdrops = imageDetails?.backdrops ?? []
-                let posters = imageDetails?.posters ?? []
-                let imagesToDownload = backdrops + posters
-                imagesToDownload.forEach() {
+                imagesToDownload.forEach() { backdrop in
                     imageDownloadGroup.enter()
-                    guard let url = URL(string: StringKey.imageBaseURL.rawValue + $0.filePath)  else {
+                    guard let url = URL(string: StringKey.imageBaseURL.rawValue + backdrop.filePath)  else {
                         imageDownloadGroup.leave()
                         return
                     }
-                    NetworkManager.shared.fetchImage(url: url) { image in
-                        if let image = image {
-                            movieImagesStack.append(image)
-                            imageDownloadGroup.leave()
+                    NetworkManager.shared.fetchImage(url: url) { [weak self] image in
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self, let image = image else { return imageDownloadGroup.leave() }
+                            self.createMovieImageView(from: image)
                         }
+                        imageDownloadGroup.leave()
                     }
                 }
                 imageDownloadGroup.notify(queue: .main) {
-                    print(movieImagesStack)
                     completion()
                 }
             case .failure(let error):

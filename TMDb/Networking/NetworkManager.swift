@@ -6,6 +6,7 @@
 //  Copyright © 2020 Khalid Asad. All rights reserved.
 //
 
+import enum PlatformCommon.NetworkError
 import UIKit
 
 final class NetworkManager: NetworkRequestProtocol {
@@ -18,15 +19,22 @@ final class NetworkManager: NetworkRequestProtocol {
         self.session = session
     }
     
-    func fetchQuery(_ term: String, page: Int, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error>) -> Void) {
+    func fetchQuery(_ term: String, page: Int, completion: @escaping (Result<MovieSearchQuery?, Error>) -> Void) {
         session.fetchQuery(term, page: page, completion: completion)
     }
     
-    func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error>) -> Void) {
-        session.fetchCredits(for: id, completion: completion)
+    func fetchCredits(for id: Int, completion: @escaping (Result<CreditsResponse?, NetworkError>) -> Void) {
+        session.fetchCredits(for: id) {
+            switch $0 {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error as NetworkError))
+            }
+        }
     }
     
-    func fetchMovieImageDetails(for id: Int, completion: @escaping (FetchInfoState<MovieImages?, Error>) -> Void) {
+    func fetchMovieImageDetails(for id: Int, completion: @escaping (Result<MovieImages?, NetworkError>) -> Void) {
         session.fetchMovieImageDetails(for: id, completion: completion)
     }
     

@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import TMDb
+@testable import PlatformCommon
 
 class MovieImagesTests: XCTestCase {
             

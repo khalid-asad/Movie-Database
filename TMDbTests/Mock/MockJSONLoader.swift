@@ -7,7 +7,7 @@
 //
 
 @testable import TMDb
-import Foundation
+@testable import PlatformCommon
 
 final class MockJSONLoader {
     
@@ -25,7 +25,7 @@ final class MockJSONLoader {
     }
     
     /// Loads the local Mocked JSON object into a generic result.
-    func load<T: Decodable>(_ file: String, completion: @escaping (FetchInfoState<T, Error>) -> Void) {
+    func load<T: Decodable>(_ file: String, completion: @escaping (Result<T, Error>) -> Void) {
         MockJSONLoader().loadLocalJSON(file: file) { json in
             guard let json = json else { return completion(.failure(NetworkError.invalidJSONResponse)) }
             

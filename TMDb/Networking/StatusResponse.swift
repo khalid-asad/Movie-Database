@@ -6,6 +6,8 @@
 //  Copyright © 2020 Khalid Asad. All rights reserved.
 //
 
+import enum PlatformCommon.NetworkError
+
 struct StatusResponse: Codable {
     var statusCode: Int
     var statusMessage: String

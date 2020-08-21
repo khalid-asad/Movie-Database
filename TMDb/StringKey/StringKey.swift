@@ -33,6 +33,17 @@ enum StringKeyFormatter {
     case creditsURL(id: Int)
     case movieImageDetailsURL(id: Int)
     
+    var path: String {
+        switch self {
+        case .searchURL:
+            return "/search/movie"
+        case .creditsURL(let id):
+            return "/movie/\(id)/credits"
+        case .movieImageDetailsURL(let id):
+            return "/movie/\(id)/images"
+        }
+    }
+    
     var rawValue: String {
         switch self {
         case .searchURL(let query, let page):

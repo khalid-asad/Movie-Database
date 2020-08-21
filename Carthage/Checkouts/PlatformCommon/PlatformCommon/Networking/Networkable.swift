@@ -69,18 +69,18 @@ public extension Networkable {
     var requestType: NetworkRequestType { .get }
     
     var url: URL? {
-        urlComponents?.url
+        URL(string: urlComponents?.url?.absoluteString.removingPercentEncoding ?? "")
     }
     
     var urlComponents: URLComponents? {
         guard var components = URLComponents(string: baseURL) else { return nil }
         
         if let urlPath = urlPath {
-            components.path = urlPath
+            components.path += urlPath
         }
         
         if let apiKey = apiKey {
-            components.query = apiKey
+            components.path += "?api_key=\(apiKey)"
         }
         
         return components
@@ -108,7 +108,7 @@ public extension Networkable {
                 } catch {
                     DispatchQueue.main.async { completion(.failure(error as? NetworkError ?? .unknown)) }
                 }
-            }
+            }.resume()
         }
     }
 }

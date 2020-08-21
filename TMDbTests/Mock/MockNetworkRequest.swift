@@ -9,6 +9,7 @@
 import Foundation
 import XCTest
 @testable import TMDb
+@testable import PlatformCommon
 
 final class MockNetworkRequest: NetworkRequestProtocol {
     
@@ -20,19 +21,33 @@ final class MockNetworkRequest: NetworkRequestProtocol {
         self.error = error
     }
     
-    func fetchQuery(_ term: String, page: Int, completion: @escaping (FetchInfoState<MovieSearchQuery?, Error>) -> Void) {
+    func fetchQuery(_ term: String, page: Int, completion: @escaping (Result<MovieSearchQuery?, Error>) -> Void) {
         if let error = error { return completion(.failure(error)) }
         MockJSONLoader().load(file, completion: completion)
     }
 
-    func fetchCredits(for id: Int, completion: @escaping (FetchInfoState<CreditsResponse?, Error>) -> Void) {
+    func fetchCredits(for id: Int, completion: @escaping (Result<CreditsResponse?, NetworkError>) -> Void) {
         if let error = error { return completion(.failure(error)) }
-        MockJSONLoader().load(file, completion: completion)
+        MockJSONLoader().load(file) { (result: Result<CreditsResponse?, Error>) in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error as! NetworkError))
+            }
+        }
     }
 
-    func fetchMovieImageDetails(for id: Int, completion: @escaping (FetchInfoState<MovieImages?, Error>) -> Void) {
+    func fetchMovieImageDetails(for id: Int, completion: @escaping (Result<MovieImages?, NetworkError>) -> Void) {
         if let error = error { return completion(.failure(error)) }
-        MockJSONLoader().load(file, completion: completion)
+        MockJSONLoader().load(file) { (result: Result<MovieImages?, Error>) in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error as! NetworkError))
+            }
+        }
     }
     
     func fetchImage(url: URL, completion: @escaping (UIImage?) -> Void) {

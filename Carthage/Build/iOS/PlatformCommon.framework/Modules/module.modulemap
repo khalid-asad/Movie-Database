@@ -1,0 +1,11 @@
+framework module PlatformCommon {
+  umbrella header "PlatformCommon.h"
+
+  export *
+  module * { export * }
+}
+
+module PlatformCommon.Swift {
+    header "PlatformCommon-Swift.h"
+    requires objc
+}
